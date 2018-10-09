@@ -1,0 +1,23 @@
+#!/bin/sh
+
+rpm_list()
+{
+    repoquery --installed --requires --resolve --qf="%{name}" "$1"
+}
+
+mf_list()
+{
+    mf_file="$1"
+    pkg="$2"
+    awk -v wanted="$pkg" -f pc-deps.awk "$mf_file"
+}
+
+if [ -z "$PKGMF" ]; then
+    for pkg in "$@"; do
+        rpm_list "$pkg"
+    done
+else
+    for pkg in "$@"; do
+        mf_list "$PKGMF" "$pkg"
+    done
+fi

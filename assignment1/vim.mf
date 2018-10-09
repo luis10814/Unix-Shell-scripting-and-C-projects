@@ -1,0 +1,55 @@
+pkg glibc 2.17-55.el7_0.3
+dep libgcc
+dep basesystem
+dep glibc
+dep glibc-common
+pkg basesystem 10.0-7.el7.centos
+pkg bash 4.2.45-5.el7_0.4
+dep ncurses-libs
+dep bash
+dep glibc
+pkg glibc-common 2.17-55.el7_0.3
+dep bash
+dep libselinux
+dep tzdata
+dep glibc
+dep glibc-common
+pkg tzdata 2014j-1.el7_0
+pkg libselinux 2.2.2-6.el7
+dep pcre
+dep libsepol
+dep libselinux
+dep xz-libs
+dep glibc
+pkg libsepol 2.1.9-3.el7
+dep bash
+dep glibc
+pkg xz-libs 5.1.2-8.el7
+dep glibc
+pkg pcre 8.32-12.el7
+dep pcre
+dep libstdc++
+dep libgcc
+dep glibc
+pkg libstdc++ 4.8.2-16.2.el7_0
+dep libgcc
+dep glibc
+pkg libgcc 4.8.2-16.2.el7_0
+pkg ncurses-libs 5.9-13.20130511.el7
+dep ncurses-libs
+dep libstdc++
+dep libgcc
+dep glibc
+dep ncurses-base
+pkg ncurses-base 5.9-13.20130511.el7
+pkg libacl 2.2.51-12.el7
+dep glibc
+dep libattr
+pkg libattr 2.4.46-12.el7
+dep glibc
+pkg vim-minimal 2:7.4.160-1.el7
+dep ncurses-libs
+dep libselinux
+dep vim-minimal
+dep glibc
+dep libacl

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; Release 0.11
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+<ul class="side-nav">
+  <li class="heading"><a href="/releases/" data-match="exact">Releases</a>
+  
+  <li><a href="/releases/lenskit-2.2.html">Release 2.2
+    (in progress)
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.1.html">Release 2.1
+    (latest)
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.5.html">Release 2.0.5
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.4.html">Release 2.0.4
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.3.2.html">Release 2.0.3.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.3.html">Release 2.0.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.2.html">Release 2.0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.1.html">Release 2.0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.html">Release 2.0
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.3.html">Release 1.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.2.html">Release 1.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.1.html">Release 1.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.0.2.html">Release 1.0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.0.1.html">Release 1.0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.0.html">Release 1.0
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.11.html">Release 0.11
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.1.html">Release 0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.9.html">Release 0.9
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.8.html">Release 0.8
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.7.html">Release 0.7
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.6.html">Release 0.6
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.5.html">Release 0.5
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.4.html">Release 0.4
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.3.html">Release 0.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.2.html">Release 0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.1.html">Release 0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.0.3.html">Release 0.0.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.0.2.html">Release 0.0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.0.1.html">Release 0.0.1
+    
+  </a>
+  
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    <h1>Release notes for LensKit 0.11</h1>
+
+
+
+
+<p>
+The 
+<a href="https://github.com/grouplens/lenskit/commits/lenskit-0.11">Git changelog</a>
+
+
+and the <a href="https://github.com/grouplens/lenskit/issues?q=milestone:0.11+is:closed">list of closed tickets and pull requests</a> provide
+
+more information on what has happened, including bugs that have been fixed.
+</p>
+
+
+<p>The primary focus of this release is making LensKit use <a href="http://bitbucket.org/grouplens/grapht">Grapht</a>
+rather than PicoContainer, with additional refactorings of components to more
+effectively take advantage of Grapht. We also made significant improvements to how
+the evaluator works to allow evaluation scripts to be more flexible, and made a number
+of other improvements and bug fixes.</p>
+
+<p>There are a number of backwards-incompatible changes in this release. Configurations and
+algorithm implementations will definitely need to be updated; other client code may need
+updates as well.</p>
+
+<h2 id="general-changes">General Changes</h2>
+
+<ul>
+  <li>
+    <p>Made <code>SparseVector</code> return <code>VectorEntry</code> objects when iterated,
+rather than <code>Long2DoubleMap.Entry</code> instances. All code that iterates over sparse
+vectors will need to be updated.</p>
+  </li>
+  <li>
+    <p>Added methods to <code>ItemScorer</code> and <code>GlobalItemScorer</code> to output scores to sparse
+vectors.</p>
+  </li>
+  <li>
+    <p>Begun documenting <a href="../versioning.html">API stability</a> (#issue(103)).</p>
+  </li>
+  <li>
+    <p>Events are no longer <code>Cloneable</code>, and the <code>clone</code> method is now a deprecated
+alias for <code>copy()</code>.</p>
+  </li>
+</ul>
+
+<h2 id="algorithm-changes">Algorithm Changes</h2>
+
+<ul>
+  <li>
+    <p>The default user similarity for user-user CF is now cosine rather than Pearson.</p>
+  </li>
+  <li>
+    <p>Item-item models can now have unbounded size and have rows truncated by threshold
+value rather than size (#issue(171)).</p>
+  </li>
+  <li>
+    <p>FunkSVD now incorporates user ratings at predict time (#issue(174)).</p>
+  </li>
+</ul>
+
+<h2 id="component-refactoring">Component Refactoring</h2>
+
+<p>This release contains a lot of algorithm and component refactorings. The public recommender
+  API is unchanged, but many components and their interfaces have changed. This means that
+  custom components and recommender configurations will need to be updated.</p>
+
+<ul>
+  <li>
+    <p>Added <code>@Shareable</code> annotation for components that can be put in the model build
+and shared between recommender sessions. All shareable components must now be annotated
+with this annotation (or configured via instance bindings), or they will not be pre-built.</p>
+  </li>
+  <li>
+    <p>Removed <code>MinRating</code> and <code>MaxRating</code> (deprecated in release 0.10).
+Code should use <code>PreferenceDomain</code> instead. See #issue(163).</p>
+  </li>
+  <li>
+    <p>Renamed <code>RatingSnapshot</code> and related classes to <code>PreferenceSnapshot</code>,
+since that’s what it really is.</p>
+  </li>
+  <li>
+    <p>Removed many annotations formerly used as dependency qualifiers (see
+#issue(168)).</p>
+
+    <ul>
+      <li>
+        <p><code>@NormalizedSnapshot</code>: components that formerly used this qualifier should depend on
+<code>userNormalizedPreferenceSnapshot</code> or use the normalizer directly.</p>
+      </li>
+      <li>
+        <p><code>@NormalizerBaseline</code>: use a context-sensitive binding on
+<code>BaselineSubtractingNormalizer</code>.</p>
+      </li>
+      <li>
+        <p><code>@PredictNormalizer</code>: use context-sensitive bindings. Usually this will require using
+context-sensitive bindings to bind the other normalizers.</p>
+      </li>
+      <li>
+        <p><code>@UserHistorySummary</code>: was redundant with the component interface.</p>
+      </li>
+      <li>
+        <p><code>@UserVectorNormalizer</code>: refactored into a separate <code>UserVectorNormalizer</code> interface,
+the default implementation of which delegates to a generic vector normalizer.
+Context-sensitive bindings configure the inner normalizer. <code>BaselineSubtractingNormalizer</code>
+has become <code>BaselineSubtractingUserVectorNormalizer</code> and implements the new interface.</p>
+      </li>
+      <li>
+        <p><code>@ItemSimilarity</code>: factored into <code>ItemSimilarity</code> interface, with default
+implementation delegating to <code>VectorSimilarity</code>.</p>
+      </li>
+      <li>
+        <p><code>@UserSimilarity</code>: factored into <code>UserSimilarity</code> interface, with default
+implementation delegating to <code>VectorSimilarity</code>.</p>
+      </li>
+      <li>
+        <p><code>@WeightedSimilarity</code>: removed in favor of context-sensitive bindings.</p>
+      </li>
+      <li>
+        <p>Dropped <code>@ClampingFunction</code> (and <code>DoubleFunction</code>) in favor of a
+<code>ClampingFunction</code> interface. The new interface provides the user and item IDs, too.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Renamed <code>HistorySummarizer</code> to <code>UserHistorySummarizer</code>, and renamed base classes.</p>
+  </li>
+  <li>
+    <p>Moved normalizers and quantizers into subpackages of <code>o.g.l.transform</code>.</p>
+  </li>
+  <li>
+    <p>Refactored similarities for k-NN recommenders. <code>Similarity</code> became <code>VectorSimilarity</code>,
+without a generic parameter, and <code>OptimizableVectorSimilarity</code> and <code>SymmetricBinaryFunction</code>
+have been replaced by methods on similarity interfaces.</p>
+  </li>
+  <li>
+    <p>Removed <code>ItemVector</code> and <code>UserVector</code> classes. User and item IDs are now carried
+independently and we use distinct component interfaces to handle users and items.</p>
+  </li>
+</ul>
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+</body>
+</html>

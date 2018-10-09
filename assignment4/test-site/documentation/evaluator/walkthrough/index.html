@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; Eval Script Walkthrough
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<link rel="canonical" href="/documentation/evaluator/walkthrough/">
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    <h1 id="evaluation-scripts">Evaluation Scripts</h1>
+
+<p>LensKit evaluations are driven by <em>evaluator scripts</em>, which define a set of
+operations such as crossfolding a data set an running a train-test evaluation
+over it.  By convention, these script files are named <code>eval.groovy</code>; if you are
+running several different experiments on the same data set(s), it is useful to
+put them in separate <code>.groovy</code> files and select the one you want with the <code>-f</code>
+option to <code>lenskit eval</code>. </p>
+
+<p>Consider again the evaluation script from the <a href="../quickstart/">Quick Start guide</a>:</p>
+
+<script src="https://gist.github.com/4f86eb836dc4ed35e995.js"> </script>
+
+<p>To run an evaluation, you need four basic things:</p>
+
+<ul>
+  <li>Data to evaluate with.</li>
+  <li>Algorithms to evaluate.</li>
+  <li>Metrics to measure their performance.</li>
+  <li>Somewhere to put the output.</li>
+</ul>
+
+<p>In LensKit, the train-test evaluator builds and tests the algorithms on the
+data, measures their output with the metrics, and writes the results to a file.
+The outer block, <code>trainTest</code>, tells LensKit that we want to do a train-test
+evaluation.  There are other commands as well, but we’ll get to those later.</p>
+
+<h3 id="input-data">Input Data</h3>
+
+<p>At the beginning of the <code>trainTest</code> block, we have the following:</p>
+
+<pre><code class="language-groovy">dataset crossfold("ml-100k") {
+    source csvfile("u.data") {
+        delimiter "\t"
+        domain {
+            minimum 1.0
+            maximum 5.0
+            precision 1.0
+        }
+    }
+}
+</code></pre>
+
+<p>This piece of code loads the main ratings file from the data set and prepares it for cross-validation.</p>
+
+<p>The first important piece is <code>dataset</code>.  It’s a directive provided by <code>trainTest</code> that adds a data set to the evaluation.  You can have multiple data sets and evaluate on all of them at once.  In fact, under the hood that is what this is doing, because…</p>
+
+<p>The <code>crossfold</code> command takes a data set and partitions it for crossfold validation.  The result is actually <em>N</em> separate train-test data sets, one for each fold.  The <code>crossfold</code> command returns these data sets, and LensKit sees <code>dataset</code> is being invoked with a list of data sets and adds them all to the evaluation.</p>
+
+<p>The crossfolder operates on a data source.  In this case it is a CSV file (actually tab-separated, but LensKit calls all delimited text files CSV files).  The file name is <code>u.data</code>, the delimiter is <code>\t</code>, and it is on a 1–5 star scale with a precision of 1 star (the <code>domain</code> block specifies the domain of ratings).</p>
+
+<h3 id="specifying-the-algorithms">Specifying the Algorithms</h3>
+
+<p>Next comes a pair of <code>algorithm</code> blocks specifying the algorithms to test:</p>
+
+<pre><code class="language-groovy">algorithm("PersMean") {
+    bind ItemScorer to UserMeanItemScorer
+    bind (UserMeanBaseline, ItemScorer) to ItemMeanRatingItemScorer
+}
+
+algorithm("ItemItem") {
+    bind ItemScorer to ItemItemScorer
+    bind UserVectorNormalizer to BaselineSubtractingUserVectorNormalizer
+    within (UserVectorNormalizer) {
+        bind (BaselineScorer, ItemScorer) to ItemMeanRatingItemScorer
+    }
+}
+</code></pre>
+
+<p>Each algorithm has a name (‘PersMean’ and ‘ItemItem’).  The <a href="../configuration/">algorithm configuration</a> is based on the concept of <em>bindings</em>: binding component interfaces (e.g. <code>ItemScorer</code>) to the desired implementations (e.g. <code>ItemItemScorer</code> for item-item collaborative filtering).</p>
+
+<p>The personalized mean (PersMean) algorithm operates by computing user and item average offsets from the global rating.  It implements the prediction rule <em>p(u,i) = μ + bᵢ + bᵤ</em>, where <em>μ</em> is the global mean rating, <em>bᵢ</em> is the difference between the item’s mean rating and the glob mean, and <em>bᵤ</em> is the mean of the differences between the user’s rating for each item and that item’s mean.  This is done by using <code>UserMeanItemScorer</code>, which scores items using a user average, as the <code>ItemScorer</code>, and telling it to use the item mean rating as the offset from which to compute user means (the <code>UserMeanBaseline</code>).</p>
+
+<p>The item-item CF algorithm (ItemItem) uses standard item-item collaborative filtering.  This is enabled by choosing <code>ItemItemScorer</code> as the item scorer implementation.  It then sets up normalization, normalizing the ratings by subtracting item means prior to computing similarities and scores.  This is done by the <code>UserVectorNormalizer</code>, which here is configured to subtract a baseline; the baseline, in turn, is set to the item mean rating.  The default settings are used for the rest of the algorithm’s parameters, such as similarity function and neighborhood size.</p>
+
+<p>For more on configuring algorithms, see:</p>
+
+<ul>
+  <li><a href="../basics/structure/">Algorithm Structure</a> (describes the core components common to many algorithms, as well as LensKit baselines)</li>
+  <li><a href="../basics/configuration/">Configuring LensKit</a></li>
+  <li>The documentation for various <a href="../algorithms/">algorithm families</a></li>
+</ul>
+
+<h3 id="metrics">Metrics</h3>
+
+<p>Next, we set up three metrics:</p>
+
+<pre><code>metric CoveragePredictMetric
+metric RMSEPredictMetric
+metric NDCGPredictMetric
+</code></pre>
+
+<p>These metrics are each classes in the <a href="http://lenskit.org/apidocs/org/grouplens/lenskit/eval/metrics/predict/package-summary.html">org.grouplens.lenskit.eval.metrics.predict</a> package.  The <code>metric</code> directive takes either a metric instance or a metric class; it will automatically instantiate the class using its default constructor.</p>
+
+<p>Each metric computes some measurement over the recommender’s output and adds it to the evaluation output.  Each metric can produce multiple measurements that will appear in separate columns in the output file.  These metrics produce:</p>
+
+<ul>
+  <li><code>CoveragePredictMetric</code>: coverage and general counting statistics (you’ll usually want to include it).  These include:
+    <ul>
+      <li><code>NUsers</code>, the number of users tested</li>
+      <li><code>NAttempted</code>, the number of predictions attempted</li>
+      <li><code>NGood</code>, the number of predictions made</li>
+      <li><code>Coverage</code>, the fraction of attempted predictions actually made</li>
+    </ul>
+  </li>
+  <li><code>RMSEPredictMetric</code>: computes the RMSE of predictions with respect to actual user ratings.  It computes both per-user (<code>RMSE.ByUser</code>) and global (<code>RMSE.ByRating</code>) RMSE.</li>
+  <li><code>NDCGPredictMetric</code>: Computes the nDCG of the prediction output, ranking items by prediction and computing the normalized discounted cumulative gain of this list using the user’s rating as each item’s gain.</li>
+</ul>
+
+<h3 id="output">Output</h3>
+
+<p>Not a whole lot here, just a simple output setting:</p>
+
+<pre><code>output "eval-results.csv"
+</code></pre>
+
+<p>This directs the evaluator to write its output to the file <code>eval-results.csv</code>.  This file contains the algorithm name, data set (name and partition), the wall clock time used to build and test the recommender, and the aggregate output of each of the metrics.</p>
+
+<p>You can also set two additional output files:</p>
+
+<ul>
+  <li><code>userOutput</code> will write a file containing metric results for each test user.  Use this if you want to post-process metric results on a user-by-user level.</li>
+  <li><code>predictOutput</code> writes each prediction (and its associated actual rating) to a CSV file.  This allows you to compute your own prediction accuracy metrics externally.</li>
+</ul>
+
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; Release 0.4
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+<ul class="side-nav">
+  <li class="heading"><a href="/releases/" data-match="exact">Releases</a>
+  
+  <li><a href="/releases/lenskit-2.2.html">Release 2.2
+    (in progress)
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.1.html">Release 2.1
+    (latest)
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.5.html">Release 2.0.5
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.4.html">Release 2.0.4
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.3.2.html">Release 2.0.3.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.3.html">Release 2.0.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.2.html">Release 2.0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.1.html">Release 2.0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.html">Release 2.0
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.3.html">Release 1.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.2.html">Release 1.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.1.html">Release 1.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.0.2.html">Release 1.0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.0.1.html">Release 1.0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.0.html">Release 1.0
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.11.html">Release 0.11
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.1.html">Release 0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.9.html">Release 0.9
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.8.html">Release 0.8
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.7.html">Release 0.7
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.6.html">Release 0.6
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.5.html">Release 0.5
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.4.html">Release 0.4
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.3.html">Release 0.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.2.html">Release 0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.1.html">Release 0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.0.3.html">Release 0.0.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.0.2.html">Release 0.0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.0.1.html">Release 0.0.1
+    
+  </a>
+  
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    <h1>Release notes for LensKit 0.4</h1>
+
+
+
+
+<p>
+The 
+<a href="https://github.com/grouplens/lenskit/commits/lenskit-0.4">Git changelog</a>
+
+
+and the <a href="https://github.com/grouplens/lenskit/issues?q=milestone:0.4+is:closed">list of closed tickets and pull requests</a> provide
+
+more information on what has happened, including bugs that have been fixed.
+</p>
+
+<h2 id="recommendation-and-prediction-api">Recommendation and Prediction API</h2>
+
+<p>To support more types of recommenders easily, we have changed the
+way the dynamic recommendation and prediction components and their
+APIs work (#issue(109), #issue(110)).  These changes are
+backwards-incompatible; client code and implementations need to be
+updated for 0.4.</p>
+
+<ul>
+  <li>
+    <p>Introduced <code>ItemScorer</code>, an generalization of prediction that
+scores items for users.</p>
+  </li>
+  <li>
+    <p>Made <code>RatingPredictor</code> an <code>ItemScorer</code>, and deleted its
+<code>predict(...)</code> methods in favor of the item scorer methods.
+It now serves as a type-level indicator that a scorer returns
+predicted preferences as scores.</p>
+  </li>
+  <li>
+    <p>Removed dynamic interfaces in favor of putting the history-based
+methods directly in the <code>ItemScorer</code> and <code>ItemRecommender</code>
+interfaces.  An added <code>canUseHistory()</code> method on each
+interface indicates whether the history will be used or ignored.
+This greatly simplifies the inheritence hierarchy for recommender
+components.</p>
+  </li>
+  <li>
+    <p>Changed the behavior of item recommenders when a <code>null</code>
+exclude set is provided.  Previously, this was equivalent to the
+empty set.  It is now equivalent to a default exclude set which
+will be recommender-specific but generally a set of items the user
+is unlikely to need recommended (such as all items they have
+rated).  All recommenders have been updated with this change.</p>
+
+    <p>The old design was easier to slightly implement but made less
+sense from a client API perspective.  The new design, where
+<code>null</code> is the default exclude set, makes the API cleaner (the
+fully-general method can use default exclude sets).  The loosened
+specification of default exclude sets also gives us greater
+flexbility for LensKit to be used as a basis for novel
+recommendation approaches.</p>
+  </li>
+</ul>
+
+<h2 id="incompatible-data-structure-changes">Incompatible data structure changes</h2>
+
+<p>To clean up APIs, we made a couple notable incompatible changes to
+layout and data structures.  These are all compile errors; no subtle
+behavior changes that the compiler won’t catch here.</p>
+
+<ul>
+  <li>
+    <p>Moved <code>UserHistory</code> and related classes to the
+<code>org.grouplens.lenskit.data.history</code> package.</p>
+  </li>
+  <li>
+    <p>Removed <code>ItemRatingVector</code> and <code>UserRatingVector</code>, as they
+type distinction severely complicates configuration for
+generalized model builders.  The upside: types remain sane and
+configuring basket recommenders will be feasible.  Downside: the
+type system doensn’t indicate whether a user vector contains
+ratings or some other data.</p>
+  </li>
+</ul>
+
+<h2 id="other-changes">Other Changes</h2>
+
+<ul>
+  <li>
+    <p>Changed <code>DynamicRatingPredictor.predict(long, Collection,
+Collection)</code> to take a <code>UserHistory</code> of events rather than a
+collection of ratings.</p>
+  </li>
+  <li>
+    <p>Made abstract recommenders and predictors uniformly expose the DAO
+as a protected final field.</p>
+  </li>
+  <li>
+    <p>Added methods to <code>DataAccessObject</code>, with default
+implementations in the abstract implementation, to allow user
+history objects to be directly retrieved for given users.</p>
+  </li>
+  <li>
+    <p>Added snapshotting as an explicit concept to the data layer.
+<code>DAOFactory</code> now has a <code>snapshot()</code> method, which is
+supposed to return an immutable snapshot of the data for
+test/build purposes.  Iterative algorithms still use rating
+snapshots, as they’re faster and provide indexing, but this allows
+us to be more flexible in what kinds of data access recommender
+component builders can perform.  Factory implementations now need
+to provide a snapshot method; this can be done by simply creating
+an event collection DAO from the events.  Users with large data
+sets may want to use more exotic methods like database replication
+or transactions.</p>
+
+    <p>The <code>JDBCRatingDAO</code> factory makes snapshotting configurable.
+By default, it assumes the database is unchanging; it can be
+configured to take an in-memory snapshot and return an
+<code>EventCollectionDAO</code>.</p>
+  </li>
+</ul>
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+</body>
+</html>

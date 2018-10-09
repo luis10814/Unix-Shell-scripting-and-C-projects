@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; Release 2.0
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+<ul class="side-nav">
+  <li class="heading"><a href="/releases/" data-match="exact">Releases</a>
+  
+  <li><a href="/releases/lenskit-2.2.html">Release 2.2
+    (in progress)
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.1.html">Release 2.1
+    (latest)
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.5.html">Release 2.0.5
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.4.html">Release 2.0.4
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.3.2.html">Release 2.0.3.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.3.html">Release 2.0.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.2.html">Release 2.0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.1.html">Release 2.0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.html">Release 2.0
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.3.html">Release 1.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.2.html">Release 1.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.1.html">Release 1.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.0.2.html">Release 1.0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.0.1.html">Release 1.0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.0.html">Release 1.0
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.11.html">Release 0.11
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.1.html">Release 0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.9.html">Release 0.9
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.8.html">Release 0.8
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.7.html">Release 0.7
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.6.html">Release 0.6
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.5.html">Release 0.5
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.4.html">Release 0.4
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.3.html">Release 0.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.2.html">Release 0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.1.html">Release 0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.0.3.html">Release 0.0.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.0.2.html">Release 0.0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.0.1.html">Release 0.0.1
+    
+  </a>
+  
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    <h1>Release notes for LensKit 2.0</h1>
+
+
+
+
+<p>
+The 
+<a href="https://github.com/grouplens/lenskit/commits/lenskit-2.0">Git changelog</a>
+
+
+and the <a href="https://github.com/grouplens/lenskit/issues?q=milestone:2.0+is:closed">list of closed tickets and pull requests</a> provide
+
+more information on what has happened, including bugs that have been fixed.
+</p>
+
+<ul>
+  <li>
+    <p>Remove many deprecated classes and methods, including algorithm-specific recommenders.</p>
+  </li>
+  <li>
+    <p><code>RatingPredictor</code> no longer extends <code>ItemScorer</code>.</p>
+  </li>
+  <li>
+    <p><code>Recommender</code>s are no longer <code>Closeable</code>, and do not need to be closed.  They can
+be left to be garbage collected.  To reflect this, <code>RecommenderEngine.open()</code> has been
+renamed <code>createRecommender()</code>.</p>
+  </li>
+  <li>
+    <p>The way DAOs work has been completely rewritten.  There is non longer a monolithic
+<code>DataAccessObject</code>, but several modular DAO instances.  Documentation on this is
+forthcoming.</p>
+  </li>
+  <li>
+    <p>Scorer, predictor, and recommender components now only take a user ID; the <code>UserHistory</code>-based
+methods have been removed.  The user event DAO should be fast &amp; caching, so individual components
+can request the data they need directly.</p>
+  </li>
+  <li>
+    <p>Event and history interfaces have been moved out of <code>lenskit-api</code> into <code>lenskit-core</code>,
+in their corresponding packages.</p>
+  </li>
+</ul>
+
+<h2 id="configuration">Configuration</h2>
+
+<ul>
+  <li>
+    <p>Since DAOs are rewritten, the configuration no longer has special-case support for them.  Right
+now it is not possible to build a configuration with one DAO implementation, serialize it, and
+replace the DAO implementation; that capability will come back in LensKit 2.1 (#issue(335)).</p>
+  </li>
+  <li>
+    <p>Provider <code>get()</code> methods can now be annotated with <code>@Shareable</code> to indicate that the
+provider returns a shareable component.</p>
+  </li>
+  <li>
+    <p>If you just want a recommender for evaluation or testing, <code>LenskitRecommender.build</code> lets
+you build one from a configuration without going through a recommender engine.</p>
+  </li>
+</ul>
+
+<h2 id="baseline-algorithms">Baseline Algorithms</h2>
+
+<p>Baseline predictors have been restructured to implement <code>ItemScorer</code>; the old
+  <code>BaselinePredictor</code> interface is gone.  Baseline scorers are qualified with
+  <code>BaselineScorer</code>.</p>
+
+<ul>
+  <li>
+    <p>To configure a baseline, bind <code>ItemScorer</code> with the qualifier <code>BaselineScorer</code>.</p>
+  </li>
+  <li>
+    <p>To fall back to a baseline for missing scores, use either <code>SimpleRatingPredictor</code> (which
+includes fallback) or <code>FallbackItemScorer</code>, which takes two item scorers annotated with
+<code>PrimaryScorer</code> and <code>BaselineScorer</code>.  The primary scorer is consulted first, and the
+baseline used to fill in any scores the primary could not.</p>
+  </li>
+  <li>
+    <p><code>ItemUserMeanPredictor</code> is gone.  Instead, the <code>UserMeanItemScorer</code> can use an arbitrary
+scorer as the base from which user offsets should be computed.  It qualifies this scorer
+dependency with <code>UserMeanBaseline</code>, which defaults to the global mean rating item scorer.
+Configure this to use <code>ItemMeanRatingItemScorer</code> to get a user-item personalized mean.</p>
+  </li>
+  <li>
+    <p><code>PrimaryScorer</code> now allows unqualified matches, so dependencies qualified with it will be
+satisfied by an unqualified <code>ItemScorer</code> binding, if there is no qualified binding.</p>
+  </li>
+</ul>
+
+<h2 id="data-structures">Data Structures</h2>
+
+<ul>
+  <li>
+    <p>More <code>SparseVectors</code> methods now throw <code>IllegalArgumentException</code> on invalid keys,
+rather than being no-ops or returning <code>NaN</code>.</p>
+  </li>
+  <li>
+    <p>Sparse vectors and scored ids now have consistent channel behavior, with <code>TypedSymbol</code> being
+the the most general interface to channels.  Raw symbols reference <em>unboxed</em> side channels (raw
+doubles or vectors); they will be how most code interacts with channels, but are now conceptually
+a special case of side channels with an optimized implementation.</p>
+  </li>
+  <li>
+    <p><code>long</code>-related collection utilities have been moved to <code>LongUtils</code>.</p>
+  </li>
+  <li>
+    <p><code>LongSortedArraySet</code> is no longer public; instead, use <code>LongUtils.packedSet</code>.</p>
+  </li>
+  <li>
+    <p>Removed <code>LongCursor</code>; it is no longer needed with the new DAOs.</p>
+  </li>
+  <li>
+    <p>Removed pointers.</p>
+  </li>
+  <li>
+    <p><code>IntIntervalList</code> is no longer public; instead, use <code>CollectionUtils.interval</code>.</p>
+  </li>
+  <li>
+    <p>For consistency, all data structures should be created using builders or static factory methods,
+not their constructors (see Effective Java).  Public data structure constructors have therefore
+been deprecated, and will be removed in LensKit 2.0.</p>
+  </li>
+  <li>
+    <p>Return packed lists from Top-N accumulators.</p>
+  </li>
+</ul>
+
+<h2 id="evaluator">Evaluator</h2>
+
+<ul>
+  <li><code>holdout</code> directive on crossfold commands no longer supports fractions; use <code>holdoutFraction</code>
+for fractional holdouts.</li>
+</ul>
+
+<h2 id="algorithms">Algorithms</h2>
+
+<ul>
+  <li>
+    <p>Item-item CF once again uses sparsity to speed up the
+model-building process.</p>
+  </li>
+  <li>
+    <p>Use scored ID lists for neighborhoods in item-item CF.</p>
+  </li>
+</ul>
+
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; Downloads
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<link rel="canonical" href="/download/">
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  <article class="main medium-12 columns">
+    <h1 id="download-lenskit">Download LensKit</h1>
+
+<p>The latest version of LensKit is 2.1.  For an
+overview of changes in this release, see the
+<a href="/releases/lenskit-2.1.html">release notes</a>.</p>
+
+<ul>
+  <li><a href="http://dl.bintray.com/lenskit/lenskit-releases/lenskit-2.1.zip">Binary archive</a> —
+contains LensKit JAR files, all dependencies, and scripts to run the LensKit
+evaluator.  LensKit binaries are hosted on <a href="https://bintray.com/lenskit/lenskit-releases/lenskit/2.1/view">BinTray</a>.</li>
+  <li>Get the source from <a href="https://github.com/lenskit/lenskit/releases/tag/lenskit-2.1">GitHub</a>.</li>
+</ul>
+
+<h2 id="using-maven">Using Maven</h2>
+
+<p>If you  want to use LensKit  within another Java project,  there is no
+need to download anything — LensKit  is published to Maven Central, so
+just add  it as a  dependency in  Maven, Ivy, or  use it via  a Groovy
+Grape.  This is the recommended way to integrate LensKit as a library.</p>
+
+<pre><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.grouplens.lenskit&lt;/groupId&gt;
+  &lt;artifactId&gt;lenskit-all&lt;/artifactId&gt;
+  &lt;version&gt;2.1&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<h2 id="prerelease">Prerelease Version</h2>
+
+<p>LensKit 2.2 is currently under development.  If you want to use it without tracking 2.2-SNAPSHOT or Git <code>master</code>, you can use version 2.2-M3:</p>
+
+<ul>
+  <li><a href="https://github.com/lenskit/lenskit/releases/download/lenskit-2.2-M3/lenskit-.zip">Binary archive</a></li>
+  <li><a href="https://github.com/lenskit/lenskit/releases/lenskit-2.2-M3">Additional downloads</a></li>
+</ul>
+
+<p>LensKit 2.2-M3 has also been pushed to Maven Central, so you can depend on it like a released version.</p>
+
+<p>You may also want to consult the <a href="../releases/lenskit-2.2">release notes</a>; note that they are likely incomplete.</p>
+
+<h2 id="developing-lenskit">Developing LensKit</h2>
+
+<p>The latest development sources for LensKit are in our
+<a href="https://github.com/grouplens/lenskit">Git repository</a> (hosted on GitHub).  The README contains
+documentation on how to start using the source code with various IDEs.</p>
+
+<p>We welcome patch submissions for LensKit. To submit a patch, just fork
+the repository on GitHub, prepare your changes, and send a pull
+request.  We also encourage you to discuss your proposed changes on the
+LensKit <a href="https://wwws.cs.umn.edu/mm-cs/listinfo/lenskit">mailing list</a>.</p>
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+</body>
+</html>

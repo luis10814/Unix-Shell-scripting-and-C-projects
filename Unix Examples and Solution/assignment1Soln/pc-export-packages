@@ -1,0 +1,10 @@
+#!/bin/sh
+
+basedir="$(dirname "$0")"
+
+NAME="$1"
+
+"$basedir/pc-list-packages" |sort >"$NAME.versions"
+for pkg in $(cut -d, -f1 "$NAME.versions"); do
+    "$basedir/pc-get-deps" "$pkg" |grep -v "^$pkg$" |sed -e "s/^/$pkg,/"
+done >"$NAME.deps"

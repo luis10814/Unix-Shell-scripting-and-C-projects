@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; Matrix Factorization
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<link rel="canonical" href="/documentation/algorithms/svd/">
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    <h1 id="matrix-factorization-cf">Matrix Factorization CF</h1>
+
+<p>LensKit provides an implementation of <a href="http://sifter.org/~simon/journal/20061211.html">FunkSVD</a>, an SVD-like collaborative filtering algorithm that uses gradient descent to learn a matrix factorization.  This code lives in the <code>lenskit-svd</code> module, under the <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/mf/funksvd/package-summary.html">org.grouplens.lenskit.mf.funksvd</a> package.</p>
+
+<h2 id="quick-start">Quick Start</h2>
+
+<p>Configuring <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/mf/funksvd/FunkSVDItemScorer.html">FunkSVDItemScorer</a> as your <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/ItemScorer.html">ItemScorer</a> implementation is the main thing to do to use FunkSVD.  There are, of course, other knobs you can tweak as well.  This configuration will train 25 features for 125 iterations each, using the default learning rate and regularization:</p>
+
+<pre><code class="language-groovy">bind ItemScorer to FunkSVDItemScorer
+bind (BaselineScorer, ItemScorer) to UserMeanItemScorer
+bind (UserMeanBaseline, ItemScorer) to ItemMeanRatingItemScorer
+set FeatureCount to 25
+set IterationCount to 125
+</code></pre>
+
+<h2 id="configuration-points">Configuration Points</h2>
+
+<p>As with all LensKit algorithms, the FunkSVD implementation is highly configurable to allow you to experiment with a wide variety of variants and configurations.  This section describes the primary configuration points for customizing the default components that drive the FunkSVD implementation.</p>
+
+<p>The FunkSVD item scorer uses a <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/mf/funksvd/FunkSVDModel.html">FunkSVDModel</a>, which in turn is built by <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/mf/funksvd/FunkSVDModelBuilder.html">FunkSVDModelBuilder</a>.  The model builder JavaDoc is the starting point for discovering most of the configuration points for training the model.  Both the model and the scorer use a <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/mf/funksvd/FunkSVDUpdateRule.html">FunkSVDUpdateRule</a> to do training updates; this component cannot be directly replaced at present, but transitively depends on many of the other configuration variables that control FunkSVD.</p>
+
+<p>Here are some of the additional configuration points (‘@’ indicates a parameter to be set with <code>set</code> rather than <code>bind</code>):</p>
+
+<ul>
+  <li><a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/baseline/BaselineScorer.html">@BaselineScorer</a> — the FunkSVD algorithm learns to predict residuals from a baseline; the baseline scorer configures what that baseline is.  <code>UserMeanItemScorer</code> with a baseline of <code>ItemMeanRatingItemScorer</code> is a good choice, and corresponds to Funk’s original design.</li>
+  <li><a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/mf/funksvd/FeatureCount.html">@FeatureCount</a> — the number of latent features to learn.</li>
+  <li><a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/mf/funksvd/InitialFeatureValue.html">@InitialFeatureValue</a> — the initial value to use for every user-feature and item-feature value.  The default of 0.1 is probably suitable for most applications.</li>
+  <li><a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/iterative/LearningRate.html">@LearningRate</a> — the gradient descent learning rate.</li>
+  <li><a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/iterative/RegularizationTerm.html">@RegularizationTerm</a> — the coefficient on the regularization term used to prefer small user-feature and item-feature values.</li>
+  <li><a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/iterative/StoppingCondition.html">StoppingCondition</a> — the condition used to stop the training loop for each feature.  The default stopping condition is <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/iterative/IterationCountStoppingCondition.html">IterationCountStoppingCondition</a>, which stops after a fixed number of epochs (controlled by <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/iterative/IterationCount.html">@IterationCount</a>).  There are other stopping conditions in <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/iterative/package-summary.html">org.grouplens.lenskit.iterative</a>.</li>
+</ul>
+
+<p>By default, FunkSVD will clamp each feature’s contribution to the rating range.  To disable this, hide the rating range:</p>
+
+<pre><code class="language-groovy">within (FunkSVDUpdateRule) {
+    bind PreferenceDomain to null
+}
+</code></pre>
+
+<h3 id="runtime-training">Runtime Training</h3>
+
+<p>By default, all user-feature values are computed when the model is built and these pre-computed user profiles are used to generate scores.  The item scorer does, however, support updating (or computing fresh) the user’s feature scores based on their most current profile.  To enable this, bind the <code>@RuntimeUpdate</code>-qualified update rule:</p>
+
+<pre><code class="language-groovy">bind (RuntimeUpdate, FunkSVDUpateRule) to FunkSVDUpdateRule
+</code></pre>
+
+<p>You can also use context-sensitive bindings to customize runtime (score-time, as opposed to model-time) updating:</p>
+
+<pre><code class="language-groovy">within (RuntimeUpdate, FunkSVDUpdateRule) {
+    bind StoppingCondition to ThresholdStoppingCondition
+}
+</code></pre>
+
+<h2 id="diagram">Diagram</h2>
+
+<p>The FunkSVD algorithm is shown below:</p>
+
+<p><img src="funksvd.svg" alt="FunkSVD Components" /></p>
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

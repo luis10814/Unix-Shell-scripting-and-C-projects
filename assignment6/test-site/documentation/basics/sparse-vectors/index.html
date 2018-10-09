@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; Sparse Vectors
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<link rel="canonical" href="/documentation/basics/sparse-vectors/">
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    
+<h1 id="lenskit-sparse-vectors">LensKit Sparse Vectors</h1>
+
+<p>LensKit uses <a href="http://lenskit.org/apidocs/org/grouplens/lenskit/vectors/package-summary.html">sparse vectors</a> a lot in its implementation and exposes them via some of the public APIs.  If you’re using LensKit, and especially if you are building algorithms for it, you will need to be able to use the sparse vector classes.</p>
+
+<h2 id="can-i-see-some-code">Can I see some code?</h2>
+
+<pre><code class="language-java">// create a vector with valid keys 3, 5, 7
+MutableSparseVector msv = MutableSparseVector.create(3, 5, 7);
+msv.set(3, 4.0);
+msv.set(5, 4.5);
+assert msv.get(5) == 4.5;
+assert msv.containsKey(5);
+// 7 has not been set, so it doesn't exist!
+assert !msv.containsKey(7);
+assert msv.size() == 2;
+msv.set(4, 4.5); // throws IllegalArgumentException, 4 is not a valid key
+</code></pre>
+
+<h2 id="what-are-they">What are they?</h2>
+
+<p>A LensKit sparse vector is a mapping of long keys to double values, much like a Fastutil <code>Long2DoubleMap</code>.  It is optimized for performing fast linear algebra operations, low memory use, and good (and predictable) overall efficiency.</p>
+
+<p>There are three main classes involved in the sparse vector API:</p>
+
+<dl>
+  <dt><code>SparseVector</code></dt>
+  <dd>The root class of the sparse vector hierarchy; it provides a read-only API with all the query operations (<code>containsKey</code>, <code>get</code>, etc.).  It also provides some basic linear algebra and statistical operations (sum, mean, Euclidean length, dot product).</dd>
+  <dt><code>ImmutableSparseVector</code></dt>
+  <dd>Adds no new methods, but guarantees that the vector will not be modified.  Immutable sparse vectors also cache their lengths, sums, means, etc., so that those operations are fast when repeatedly applied.</dd>
+  <dt><code>MutableSparseVector</code></dt>
+  <dd>Adds mutation methods (set, add, subtract, multiply, etc.).</dd>
+</dl>
+
+<h2 id="how-to-i-create-one">How to I create one?</h2>
+
+<p>There are several ways you can create a sparse vector.</p>
+
+<p>From a map:</p>
+
+<pre><code class="language-java">Map&lt;Long,Double&gt; someMap = /* create a map */;
+// create an immutable vector
+SparseVector sv = ImmutableSparseVector.create(someMap);
+// or a mutable one
+MutableSparseVector msv = MutableSparseVector.create(someMap);
+</code></pre>
+
+<p>With some keys, filled with a value:</p>
+
+<pre><code class="language-java">Set&lt;Long&gt; keys = /* get keys from somewhere */;
+MutableSparseVector msv = MutableSparseVector.create(keys, 4.5);
+assert msv.size() == keys.size();
+// msv now maps every key in keys to 4.5
+</code></pre>
+
+<p>With some valid keys, but empty:</p>
+
+<pre><code class="language-java">Set&lt;Long&gt; keys = /* get keys from somewhere */;
+MutableSparseVector msv = MutableSparseVector.create(keys);
+// the vector is empty
+assert msv.size() == 0;
+// but has the keys (more on this later)
+assert msv.keyDomain().equals(keys);
+</code></pre>
+
+<p>With some fixed keys (mostly useful in unit tests):</p>
+
+<pre><code class="language-java">MutableSparseVector msv = MutableSparseVector.create(4, 9, 27);
+assert msv.size() == 0;
+</code></pre>
+
+<h2 id="how-do-i-get-the-values-out">How do I get the values out?</h2>
+
+<p>All sparse vectors have a <code>get</code> method, a lot like <code>get</code> in the standard Java <code>Map</code> interface.  You give it a key, and it gives you the value:</p>
+
+<pre><code class="language-java">sv.get(5);  // yields the value of 5, or throws IllegalArgumentException
+</code></pre>
+
+<p>You can specify a default value:</p>
+
+<pre><code class="language-java">sv.get(5, 0);  // yields the value of 5, or 0 if 5 is not in the vector
+</code></pre>
+
+<p>You can also iterate over a vector in terms of <code>VectorEntry</code> objects.  These contain keys and values:</p>
+
+<pre><code class="language-java">for (VectorEntry e: sv) {
+    System.out.format("%d: %s\n", e.getKey(), e.getValue());
+}
+</code></pre>
+
+<p>Sparse vectors also support <em>fast iteration</em>, a concept borrowed from the Fastutil library.  Since vectors don’t actually store <code>VectorEntry</code> objects internally, they have to create a fresh one for each iteration of a loop.  Fast iteration allows the vector to modify and re-use the same entry object each time:</p>
+
+<pre><code class="language-java">for (VectorEntry e: sv.fast()) {
+    // e may be the same object each time, modified to point
+    // to the next key-value pair.
+    System.out.format("%d: %s\n", e.getKey(), e.getValue());
+}
+</code></pre>
+
+<p>Fast iteration is only appropriate if your loop just examines the entry object in the loop body and does not retain a reference to it anywhere.  When applicable, it allows you to quickly iterate over a vector without putting as much pressure on the garbage collector.  In practice, most loops are suitable for fast iteration.</p>
+
+<h2 id="how-do-i-put-values-in">How do I put values in?</h2>
+
+<p>You can create a vector with data from a map, or a set of keys and a constant value, as shown in the previous section.</p>
+
+<p>But you often want to populate a vector with more interesting values.</p>
+
+<p>First, you need to create a mutable vector.  The vector must be created with all the keys you will need; once a vector is created, you cannot add new keys.  If you need to build up a vector but don’t know in advance the keys you will need, it’s probably best to use a <code>Long2DoubleMap</code> and then use it to populate a vector.</p>
+
+<p>So you have the keys you need, we’ll call the set containing them <code>keys</code>.   This should be a <code>Set&lt;Long&gt;</code>; if it is a Fastutil <code>LongSet</code>, the vector code will detect that and create the new vector without boxing all the keys.  Create the vector:</p>
+
+<pre><code class="language-java">MutableSparseVector msv = MutableSparseVector.create(keys);
+</code></pre>
+
+<p>Now, this vector is empty, but has <code>keys</code> as its set of valid keys (called the <em>key domain</em>).  If the key domain contains 5, we can set the vector’s value for 5:</p>
+
+<pre><code class="language-java">msv.set(5, Math.PI);
+</code></pre>
+
+<p>The key domain must contain any key we want to set.  <code>set</code> throws <code>IllegalArgumentException</code> if it is asked to set a key that is not in the key domain.</p>
+
+<p>We can also <em>fill</em> the vector, setting every key in the domain to the same value:</p>
+
+<pre><code class="language-java">msv.fill(Math.E);
+</code></pre>
+
+<p>You can also modify a vector while iterating over it:</p>
+
+<pre><code class="language-java">for (VectorEntry e: msv.fast()) {
+    // note that we set e directly, not e.getKey()
+    msv.set(e, Math.log(e.getValue()));
+}
+</code></pre>
+
+<h2 id="keys-and-key-domains---whats-up-with-that">Keys and key domains - what’s up with that?</h2>
+
+<p>Sparse vectors have two sets of keys.  The <em>key domain</em>, accessed with <code>sv.keyDomain()</code>, is the set of all keys which the vector may contain.  This is fixed when the vector object is created.</p>
+
+<p>The <em>key set</em>, accessed with <code>sv.keySet()</code> as well as <code>sv.containsKey()</code> and <code>sv.size()</code>, is the set of keys that the vector actually does map to values.  It is a subset of the key domain.</p>
+
+<p>So when you create a new sparse vector, and don’t give it values, the key <em>domain</em> contains all the keys you gave it, and the key <em>set</em> is empty (as is the vector).  Once you set some values with <code>set</code> or <code>fill</code>, then the key set is nonempty.</p>
+
+<p>The reason for this design is that a sparse vector is represented internally as a pair of arrays, one of keys and another of values, sorted by key.  This allows fast lookup by binary search (<em>O(lg n)</em>) as well as very fast linear algebra operations (<em>O(n)</em> for many operations such as dot products).</p>
+
+<p>Requiring the set of possible keys up front means that the vector never has to expand the arrays or reshuffle data to make room for a new key.  Setting or retrieving a value is always <em>O(lg n)</em>.  It also allows the same key storage to be shared across multiple vectors in certain cases, reducing memory use and time spent copying data around.  We find it to be a useful tradeoff for the kinds of operations that LensKit uses sparse vectors for.</p>
+
+<h2 id="anything-else">Anything else?</h2>
+
+<p>Much, much more.</p>
+
+<h3 id="bulk-operations">Bulk operations</h3>
+
+<p>You’ve already seen <code>fill</code>, which fills a vector with a value.  There is also a bulk <code>add</code>, adding a scalar to every value in the vector:</p>
+
+<pre><code class="language-java">MutableSparseVector msv = MutableSparseVector.create(3, 4, 5);
+msv.set(3, 1.0);
+msv.set(4, 2.0);
+msv.set(5, 1.5);
+msv.add(2.0);
+assert msv.get(3) == 3.0;
+assert msv.get(4) == 4.0;
+assert msv.get(5) == 3.5;
+</code></pre>
+
+<p>There is also a bulk <code>multiply(double)</code> which multiplies every value by a scalar.</p>
+
+<p>Both of these operations leave unset keys unchanged.</p>
+
+<p>Finally, <code>clear()</code> unsets all keys (and <code>unset(long)</code> unsets a single key).</p>
+
+<h3 id="linear-algebra-operations">Linear algebra operations</h3>
+
+<p>Compute values of a single vector:</p>
+
+<pre><code class="language-java">SparseVector sv = ImmutableSparseVector.create(someMap);
+sv.sum();    // sum up the values (L_1 norm)
+sv.mean();   // arithmetic mean of the values
+sv.norm();   // Euclidean length of the vector (L_2 norm)
+</code></pre>
+
+<p>Compute dot products between two vectors:</p>
+
+<pre><code class="language-java">SparseVector sv1 = ImmutableSparseVector.create(someMap);
+SparseVector sv2 = ImmutableSparseVector.create(someOtherMap);
+sv1.dot(sv2);
+</code></pre>
+
+<p>The dot product ignores keys that are set in one vector but missing or unset in the other; it is equivalent to treating missing keys as being mapped to 0.</p>
+
+<h3 id="pairwise-modifications">Pairwise modifications</h3>
+
+<p><code>MutableSparseVector</code> also lets you do bulk operations with another vector.  In these operations, it is always the vector that you are calling the method on that is being modified, not the vector you pass as the argument.</p>
+
+<p>Copy values from one vector to another:</p>
+
+<pre><code class="language-java">MutableSparseVector msv = MutableSparseVector.create(3,5,9);
+msv.set(otherVector);
+</code></pre>
+
+<p>You can do pairwise addition or subtraction, adding every value in <code>otherVector</code> to the corresponding value in <code>msv</code>:</p>
+
+<pre><code class="language-java">msv.add(otherVector);
+msv.subtract(anotherVector);
+</code></pre>
+
+<p>And do pairwise multiplication (multiply each value in both <code>msv</code> and <code>otherVector</code>, storing the result in <code>msv</code>, and leaving other keys’ values unchanged):</p>
+
+<pre><code class="language-java">msv.multiply(otherVector);
+</code></pre>
+
+<p>All of these operations are <em>O(max(m,n))</em> where <em>m</em> and <em>n</em> are the lengths of the two vectors.</p>
+
+<h2 id="how-do-i-convert-between-mutable-and-immutable-vectors">How do I convert between mutable and immutable vectors?</h2>
+
+<p>All sparse vectors have a couple of operations for mutable/immutable conversions:</p>
+
+<ul>
+  <li><code>immutable()</code> returns an immutable version of the vector.  If the vector is already immutable, it just returns it; otherwise, it returns an immutable copy.</li>
+  <li><code>mutableCopy()</code> returns a mutable copy of the vector.  This is always a copy, so you can freely modify it and be confident that no other code will see those modifications.</li>
+</ul>
+
+<p>There is a third method supported by <code>MutableSparseVector</code>: <code>freeze()</code>.  This is like <code>immutable()</code>, with two important differences:</p>
+
+<ul>
+  <li>It tries to compact the vector.  If there are unset keys in the mutable sparse vector, then those keys are not included in the immutable vector’s key domain.  This reduces the storage required by expunging unset keys.</li>
+  <li>It tries to reuse value storage.  If there are no unset keys, then the value array from the mutable sparse vector is reused in the immutable one.  This reduces the overhead of creating another array copy.</li>
+</ul>
+
+<p>After a mutable sparse vector has been frozen, it can no longer be used.</p>
+
+<p>It’s a common idiom in LensKit to create a mutable vector, populate it and use it to accumulate some results, and then return a frozen version of it.  The freeze operation will either save space in the resulting vector by omitting unset keys, or it will save space and time by re-using the value storage.</p>
+
+<pre><code class="language-java">MutableSparseVector msv = MutableSparseVector.create(lotsaKeys);
+/* lots of math to accumulate computation results in msv */
+return msv.freeze();
+</code></pre>
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

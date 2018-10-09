@@ -1,0 +1,18 @@
+#!/bin/sh
+
+rpm_list()
+{
+    exec rpm -qa --qf '%{name},%{evr}\n'
+}
+
+mf_list()
+{
+    mf_file="$1"
+    awk '/^pkg / {print $2 "," $3}' $mf_file
+}
+
+if [ -z "$PKGMF" ]; then
+    rpm_list
+else
+    mf_list "$PKGMF"
+fi

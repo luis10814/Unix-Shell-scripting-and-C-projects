@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; Experiment Quickstart
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<link rel="canonical" href="/documentation/evaluator/quickstart/">
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    <h1 id="getting-started-with-the-evaluator">Getting Started with the Evaluator</h1>
+
+<p>The LensKit evaluator lets you train algorithms over data sets, measure their
+performance, and cross-validate the results for robustness.  This page
+describes how to get started using the evaluator for a simple experiment.</p>
+
+<p>We will use the LensKit command line tool from the binary distribution to run
+the experiment.  You can also run experiments from more sophisticated build
+tools such as <a href="http://www.gradle.org">Gradle</a>.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>To run the evaluator, you’ll need the following:</p>
+
+<ul>
+  <li>Java 6 or later (Java 7 or later is best).</li>
+  <li>The <a href="https://bintray.com/lenskit/lenskit-releases/lenskit/2.1/view">LensKit binary distribution</a>.</li>
+  <li>A tool for analyzing the results.  For this example, we will use <a href="http://www.r-project.org/">R</a> with <a href="http://cran.r-project.org/web/packages/ggplot2/index.html">ggplot2</a>.</li>
+  <li>The <a href="http://grouplens.org/datasets/movielens/">MovieLens 100K</a> data set.</li>
+</ul>
+
+<h2 id="creating-the-evaluation-script">Creating the Evaluation Script</h2>
+
+<p>The core of an experiment is the evaluation script, typically called <code>eval.groovy</code>:</p>
+
+<script src="https://gist.github.com/4f86eb836dc4ed35e995.js"> </script>
+
+<p>Unpack your MovieLens data set (your current directory should have an
+<code>eval.groovy</code> file and a <code>ml-100k</code> directory), and run the script using the
+<code>lenskit</code> program from the <a href="/download/">binary distribution</a><sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup>:</p>
+
+<p><code>
+$ lenskit eval
+</code></p>
+
+<p>This does does a few things:</p>
+
+<ol>
+  <li>Splits the MovieLens 100K data set into 5 partitions for cross-validation.
+These partitions are stored under <code>ml-100k-crossfold</code>.</li>
+  <li>Generates predictions for test user/item pairs using three algorithms:
+personalized mean, item-item CF, and Funk-SVD.</li>
+  <li>Evaluates these two algorithms with three metric families: coverage, RMSE,
+and nDCG.</li>
+  <li>Writes the evaluation results to <code>eval-results.csv</code>, one row for
+each combination of algorithm and fold.</li>
+</ol>
+
+<h2 id="analyzing-the-output">Analyzing the Output</h2>
+
+<p>LensKit produces a CSV file containing the evaluation results.  This can be
+analyzed with your choice of tool, for example R:</p>
+
+<script src="https://gist.github.com/14e07223ccca80860aed.js"> </script>
+
+<p>This will produce a box plot of per-user RMSE:</p>
+
+<p><img src="results.png" alt="Per-user RMSE box plot" /></p>
+
+<h2 id="further-reading">Further Reading</h2>
+
+<ul>
+  <li>This whole project can be <a href="https://github.com/lenskit/simple-eval-demo/">cloned from GitHub</a>.</li>
+  <li><a href="../walkthrough/">Walk through the eval script</a></li>
+</ul>
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p>Without any options, the <code>eval</code> LensKit command runs the evaluation
+defined in the file <code>eval.groovy</code>.  If you want to use anothe file name,
+specify it with <code>-f file.groovy</code>, just like <code>make</code>.  This is useful for having
+multiple different evaluations in the same directory. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

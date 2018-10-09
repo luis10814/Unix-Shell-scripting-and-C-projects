@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; LensKit 2.1 released
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  <article class="main medium-12 columns">
+    <h1>LensKit 2.1 released</h1>
+<p>We are pleased to announce the release of LensKit 2.1.  This is the first
+significant feature update in the LensKit 2.0 series, and has many new
+features, bug fixes, and performance improvements.</p>
+
+<p>A few highlights:</p>
+
+<ul>
+  <li>
+    <p>The <code>lenskit-all</code> module is now available, depending on the other LensKit
+modules, so you can pull in all of LensKit with a single dependency.</p>
+  </li>
+  <li>
+    <p>The evaluator can now automatically share common components (e.g.
+similarity matrices) between multiple configurations, resulting in much
+higher throughput for large evaluation experiments..</p>
+  </li>
+  <li>
+    <p>Saved recommender engines can be reconnected to a different database when
+they are loaded.</p>
+  </li>
+  <li>
+    <p>LensKit now uses Gradle to handle its build process.</p>
+  </li>
+  <li>
+    <p>LensKit is now at <a href="http://lenskit.org">http://lenskit.org</a> and its GitHub page is moved to
+<a href="http://github.com/lenskit/lenskit">http://github.com/lenskit/lenskit</a>.  Binaries are on <a href="https://bintray.com/lenskit/lenskit-releases/lenskit/">BinTray</a>.  The
+Maven group and Java package are still under <code>org.grouplens.lenskit</code>; that
+will not change until LensKit
+3.0.</p>
+  </li>
+</ul>
+
+<p>See the <a href="/releases/lenskit-2.1.html">release notes</a> for more details.</p>
+
+<p>The Maven plugin and archetypes will be updated shortly.  They are now managed in a separate repository.</p>
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+</body>
+</html>

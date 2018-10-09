@@ -1,0 +1,6 @@
+#!/bin/sh
+
+A="$1"
+B="$2"
+
+join -t, -v1 -o1.1 "$A.versions" "$B.versions"

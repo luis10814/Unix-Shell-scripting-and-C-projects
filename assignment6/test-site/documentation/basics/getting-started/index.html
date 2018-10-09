@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; Getting Started
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<link rel="canonical" href="/documentation/basics/getting-started/">
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    <h1 id="getting-started-with-lenskit">Getting Started with LensKit</h1>
+
+<p>This page describes how to embed LensKit in an application.</p>
+
+<p>The <a href="http://github.com/lenskit/lenskit-hello">lenskit-hello</a> project provides a working example of configuring, building, and using a recommender.  This document is based on that code.</p>
+
+<h2 id="getting-lenskit">Getting LensKit</h2>
+
+<p>We recommend getting LensKit from the Maven central repositories.  To
+do this in a Maven project, add the following to the <code>&lt;dependencies&gt;</code>
+section of your application’s <code>pom.xml</code>:</p>
+
+<pre><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.grouplens.lenskit&lt;/groupId&gt;
+  &lt;artifactId&gt;lenskit-all&lt;/artifactId&gt;
+  &lt;version&gt;2.1&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p><code>lenskit-all</code> will pull in all of LensKit except the command line interface.  You can instead depend on the particular pieces of LensKit that you need, if you want.  But <code>lenskit-all</code> is a good way to get started.</p>
+
+<p>You can also retrieve LensKit from Maven using Gradle, SBT, Ivy, or any other Maven-compatible dependency resolver.  If you don’t want to let your build system manage your dependencies, download the <a href="http://lenskit.grouplens.org/download.html">binary distribution</a> and put the JARs in your project’s library directory.</p>
+
+<h2 id="configuring-the-recommender">Configuring the Recommender</h2>
+
+<p>In order to use LensKit, you first need to configure the LensKit algorithm you want to use.  This consists primarily of selecting the component implementations you want and configuring them with a <a href="http://lenskit.org/apidocs/org/grouplens/lenskit/core/LenskitConfiguration.html">LenskitConfiguration</a>.  For example, to configure a basic item-item kNN recommender with baseline:</p>
+
+<pre><code class="language-java">LenskitConfiguration config = new LenskitConfiguration()
+// Use item-item CF to score items
+config.bind(ItemScorer.class)
+      .to(ItemItemScorer.class);
+// let's use personalized mean rating as the baseline/fallback predictor.
+// 2-step process:
+// First, use the user mean rating as the baseline scorer
+config.bind(BaselineScorer.class, ItemScorer.class)
+      .to(UserMeanItemScorer.class);
+// Second, use the item mean rating as the base for user means
+config.bind(UserMeanBaseline.class, ItemScorer.class)
+      .to(ItemMeanRatingItemScorer.class);
+// and normalize ratings by baseline prior to computing similarities
+config.bind(UserVectorNormalizer.class)
+      .to(BaselineSubtractingUserVectorNormalizer.class);
+</code></pre>
+
+<h2 id="connecting-the-data-source">Connecting the Data Source</h2>
+
+<p>LensKit also requires a data source.  To keep things simple, we’ll just use a CSV file:</p>
+
+<pre><code class="language-java">config.bind(EventDAO.class).to(new SimpleFileRatingDAO(new File("ratings.csv"), ","));
+</code></pre>
+
+<h2 id="creating-the-recommender">Creating the Recommender</h2>
+
+<p>You then need to create a recommender to actually be able to recommend:</p>
+
+<pre><code class="language-java">LenskitRecommender rec = LenskitRecommender.create(config);
+</code></pre>
+
+<h2 id="generating-recommendations">Generating Recommendations</h2>
+
+<p>The recommender object provides access to components like <code>ItemRecommender</code> that can do the actual recommendation.  For example, to generate 10 recommendations for user 42:</p>
+
+<pre><code class="language-java">ItemRecommender irec = rec.getItemRecommender();
+List&lt;ScoredId&gt; recommendations = irec.recommend(42, 10);
+</code></pre>
+
+<p>Since we did not configure an <code>ItemRecommender</code> when configuring LensKit, it uses the default: the <code>TopNItemRecommender</code>, which scores items using the configured <code>ItemScorer</code> and returns the <em>N</em> highest-scored items.  Since we are using item-item CF, these scores are the raw predicted ratings from item-item collaborative filtering.</p>
+
+<p>You can also also predict ratings with the <code>RatingPredictor</code>:</p>
+
+<pre><code class="language-java">RatingPredictor pred = rec.getRatingPredictor();
+double score = pred.predict(42, 17);
+</code></pre>
+
+<h2 id="more-reading">More Reading</h2>
+
+<ul>
+  <li><a href="../configuration/">Configuring LensKit</a></li>
+  <li><a href="../structure/">How LensKit recommenders are structured</a></li>
+  <li><a href="../data-access/">Connecting to data sources</a></li>
+  <li><a href="../../evaluator/quickstart/">How to run an algorithm experiment</a></li>
+</ul>
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

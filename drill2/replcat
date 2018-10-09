@@ -1,0 +1,15 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $text = shift;
+my $repl = shift;
+
+die "no text specified\n" unless defined $text;
+die "no replacement specified\n" unless defined $repl;
+
+while (<>) {
+    s/\Q$text\E/$repl/g;
+    print;
+}

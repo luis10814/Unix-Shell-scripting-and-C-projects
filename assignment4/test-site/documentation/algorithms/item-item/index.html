@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; Item-Item CF
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<link rel="canonical" href="/documentation/algorithms/item-item/">
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    <h1 id="item-item-collaborative-filtering">Item-Item Collaborative Filtering</h1>
+
+<p>LensKit provides flexible, performant implementation of item-item collaborative filtering [Sarwar et al. 2001; Deshpande and Karypis 2004] as part of the <code>lenskit-knn</code> module, in the <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/knn/item/package-summary.html">org.grouplens.lenskit.knn.item</a> package.</p>
+
+<h2 id="quick-start">Quick Start</h2>
+
+<p>The LensKit archetypes provide a basic item-item CF configuration that performs pretty well on the MovieLens data sets:</p>
+
+<pre><code class="language-groovy">// configure the item scorer
+bind ItemScorer to ItemItemScorer
+// set up a baseline predictor
+bind (BaselineScorer,ItemScorer) to ItemMeanRatingItemScorer
+// use the baseline for normalizing user ratings
+bind UserVectorNormalizer to BaselineSubtractingUserVectorNormalizer
+// the default neighborhood size is 20, so the next line isn't technically needed
+set NeighborhoodSize to 20
+</code></pre>
+
+<h2 id="configuration-points">Configuration points</h2>
+
+<p>LensKit’s item-item implementation is highly configurable.  It can be adapted to many different proposed variations and have components swapped out for new experiments.</p>
+
+<p>Alternative component implementations can add additional configuration points, but this section documents many of the common ones.  Parameters are denoted <code>@Param</code>, and component types are listed alone as <code>ComponentType</code>.</p>
+
+<h3 id="scorerpredictor">Scorer/Predictor</h3>
+
+<p>The <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/knn/item/ItemItemScorer.html">ItemItemScorer</a> class is the main driver for the item-item implementation and its configuration.  Configuring it as your item scorer is the primary way to configure that item-item CF is to be used.  It has a couple direct parameters and dependencies that can be configured:</p>
+
+<ul>
+  <li><code>@NeighborhoodSize</code>: <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/knn/params/NeighborhoodSize.html">NeighborhoodSize</a> sets how many neighbors to use for each prediction.  This is actually declared as a dependency of <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/knn/item/DefaultItemScoreAlgorithm.html">DefaultItemScoreAlgorithm</a>, but most of the time that implementation detail doesn’t matter.</li>
+  <li><code>UserHistorySummarizer</code>: The summarizer (see <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/data/history/UserHistorySummarizer.html">UserHistorySummarizer</a>) is used to extract score vectors from user histories.  When using the rating predictor, these vectors should be rating vectors.  The default summarizer uses all the user’s <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/data/event/Rating.html">Rating</a> events to construct a rating vector.  Bind this to <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/data/history/EventCountUserHistorySummarizer.html">EventCountUserHistorySummarizer</a> to use event (e.g. purchase) counts in an implicit feedback context.</li>
+</ul>
+
+<h3 id="model-builder">Model Builder</h3>
+
+<p>The item-item CF model (similarity matrix) is built by <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/knn/item/model/ItemItemModelBuilder.html">ItemItemModelBuilder</a>.  This is, of course, also configurable.</p>
+
+<ul>
+  <li><code>ItemSimilarity</code>: The <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/knn/item/ItemSimilarity.html">ItemSimilarity</a> component specifies the similarity function used to compare items.  The default implementation is <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/knn/item/ItemVectorSimilarity.html">ItemVectorSimilarity</a>, which uses a general <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/vectors/similarity/VectorSimilarity.html">VectorSimilarity</a> to compare the item’s score (rating) vectors.  The default <code>VectorSimilarity</code>, in turn, is cosine similarity.</li>
+  <li><code>Threshold</code>: A <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/transform/threshold/Threshold.html">Threshold</a> that determines what item similarities are to be kept. By default, all positive similarities are considered for the model.</li>
+  <li><code>@ModelSize</code>: The maximum number of neighbors to retain in the model for each item.  If 0 (the default as of LensKit 1.1), then all neighbors that pass the threshold are kept.</li>
+</ul>
+
+<p>Indirectly, it also makes use of the following configuration points:</p>
+
+<ul>
+  <li><code>UserVectorNormalizer</code>: A normalization applied to user rating vectors before item similarities are computed. Interesting implementations of this class include <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/transform/normalize/BaselineSubtractingUserVectorNormalizer.html">BaselineSubtractingUserVectorNormalizer</a>, which subtracts the baseline score from each rating value, and <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/transform/normalize/DefaultUserVectorNormalizer.html">DefaultUserVectorNormalizer</a> (the default) with its <code>VectorNormalizer</code> bound to <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/transform/normalize/MeanVarianceNormalizer.html">MeanVarianceNormalizer</a> or <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/transform/normalize/IdentityVectorNormalizer.html">IdentityVectorNormalizer</a> (the default).</li>
+  <li><code>UserHistorySummarizer</code>: The summarizer for building user vectors for item similarity computation. By default, extracts rating vectors. If you don’t do anything special using context-dependent bindings, the same user history summarizer will be used for both the model build and item scoring phases.</li>
+</ul>
+
+<h3 id="similarity-function">Similarity function</h3>
+
+<p>When using the default item similarity function, which delegates to a vector similarity, there are a couple of interesting parameters to configure on it:</p>
+
+<ul>
+  <li><code>VectorSimilarity</code>: The vector similarity function, such as cosine or Pearson, to compare item vectors. This is used to allow both item and user similarities to reuse the same general vector similarity functions.</li>
+  <li><code>@SimilarityDamping</code>: Many similarity functions take a <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/vectors/similarity/SimilarityDamping.html">SimilarityDamping</a> parameter, which shrinks the similarity towards 0 when comparing vectors with few users in common.</li>
+</ul>
+
+<h3 id="more-sophisticated-configuration">More sophisticated configuration</h3>
+
+<p>These are just the basic configuration points. Many components can be replaced (explore the JavaDoc and sources to see what all classes are in play), which may result in many more configuration possibilities. In our <a href="http://bitbucket.org/grouplens/lenskit-recsys2012">RecSys 2012 paper</a>, we replaced the entire <code>ItemItemModel</code>  with an alternate implementation based a Lucene index of movie tags, allowing us to re-use the <code>ItemItemScorer</code> to do tag-based recommendation.</p>
+
+<h3 id="diagram">Diagram</h3>
+
+<p>This diagram shows the objects involved in a standard item-item configuration.  Right-click it and view the image for a better view.</p>
+
+<p><img src="item-item.svg" alt="Item-Item Configuration" /></p>
+
+<h2 id="references">References</h2>
+
+<ol>
+  <li>Mukund Deshpande and George Karypis. 2004. <a href="http://doi.acm.org/10.1145/963770.963776">Item-based top-N recommendation algorithms</a>. <em>ACM Trans. Inf. Syst</em>. 22, 1 (January 2004), 143-177.</li>
+  <li>Badrul Sarwar, George Karypis, Joseph Konstan, and John Riedl. 2001. <a href="http://doi.acm.org/10.1145/371920.372071">Item-based collaborative filtering recommendation algorithms</a>. In <em>Proc. ACM WWW ‘01</em>. ACM, New York, NY, USA, 285-295.</li>
+</ol>
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

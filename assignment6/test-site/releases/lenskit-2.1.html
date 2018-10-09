@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; Release 2.1
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+<ul class="side-nav">
+  <li class="heading"><a href="/releases/" data-match="exact">Releases</a>
+  
+  <li><a href="/releases/lenskit-2.2.html">Release 2.2
+    (in progress)
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.1.html">Release 2.1
+    (latest)
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.5.html">Release 2.0.5
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.4.html">Release 2.0.4
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.3.2.html">Release 2.0.3.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.3.html">Release 2.0.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.2.html">Release 2.0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.1.html">Release 2.0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.html">Release 2.0
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.3.html">Release 1.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.2.html">Release 1.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.1.html">Release 1.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.0.2.html">Release 1.0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.0.1.html">Release 1.0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.0.html">Release 1.0
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.11.html">Release 0.11
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.1.html">Release 0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.9.html">Release 0.9
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.8.html">Release 0.8
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.7.html">Release 0.7
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.6.html">Release 0.6
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.5.html">Release 0.5
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.4.html">Release 0.4
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.3.html">Release 0.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.2.html">Release 0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.1.html">Release 0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.0.3.html">Release 0.0.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.0.2.html">Release 0.0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.0.1.html">Release 0.0.1
+    
+  </a>
+  
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    <h1>Release notes for LensKit 2.1</h1>
+
+
+
+
+<p>
+The 
+<a href="https://github.com/grouplens/lenskit/commits">Git changelog</a>
+
+
+and the <a href="https://github.com/grouplens/lenskit/issues?q=milestone:2.1+is:closed">list of closed tickets and pull requests</a> provide
+
+more information on what has happened, including bugs that have been fixed.
+</p>
+
+<h2 id="general-changes">General Changes</h2>
+
+<ul>
+  <li>
+    <p>LensKit now uses Gradle (version 2.0) to build instead of Maven.  Artifacts
+are still pushed to Maven Central.</p>
+  </li>
+  <li>
+    <p>Added <code>lenskit-all</code> module so you can easily depend on all of LensKit with
+a single dependency.</p>
+  </li>
+  <li>
+    <p>Added <code>LenskitInfo</code> class, providing access to information about LensKit.
+Currently, it provides access to the Git revisions that are included in the
+build.  This works with released binaries of LensKit, and versions built
+from Git sources; it will not work from tarball builds.</p>
+  </li>
+  <li>
+    <p>Fixed equality and hashing on ratings to be consistently correct.</p>
+  </li>
+</ul>
+
+<h2 id="data-access">Data Access</h2>
+
+<ul>
+  <li>
+    <p>New methods to more easily construct DAOs (#issue(346))</p>
+  </li>
+  <li>
+    <p><code>Rating</code> class now has <code>hasValue()</code> and <code>getValue()</code> methods for
+convenience.</p>
+  </li>
+  <li>
+    <p><strong>Incompatible change:</strong> <code>ItemEventDAO</code> now has a <code>streamEventsByItem</code>
+method, corresponding to the orthogonal methods on <code>UserEventDAO</code>.  Custom
+DAO implementations will need to provide this new method.</p>
+  </li>
+  <li>
+    <p><strong>Incompatible change:</strong> The <code>UserEventDAO</code> and <code>ItemEventDAO</code> classes now
+have type-filtered versions of their <code>streamEventsByUser</code> and
+<code>streamEventsByItem</code> methods.  Implementers will need to implement these
+new methods.</p>
+  </li>
+  <li>
+    <p><strong>Incompatible change:</strong> The <code>SQLStatementFactory</code> interface no longer
+exposes user and item count statements (they were unused by all current
+DAOs).</p>
+  </li>
+  <li>
+    <p><strong>Incompatible change:</strong> The <code>JDBCRatingDAO</code> is no longer injectable.  It
+cannot be safely constructed by the injector without lifecycle support in
+the LensKit recommender container (#issue(456)).  JDBC rating DAOs can
+still be injected into other components, but they should be configured with
+an instance binding to the particular DAO instance rather than attempting
+to let the injector instantiate the DAO.</p>
+  </li>
+  <li>
+    <p>The JDBC DAO now caches query results.  The cache is configurable with
+Guava’s cache builders (#issue(541)).</p>
+  </li>
+  <li>
+    <p>Implemented new <code>BinaryRatingDAO</code> to read ratings from a packed binary file
+of rating data.  Build a file with <code>BinaryRatingPacker</code> or the <code>pack</code> eval
+task.  The new CLI also provides a command to pack rating data.</p>
+  </li>
+  <li>
+    <p>Simple file rating DAO now trims spaces from fields (#590).</p>
+  </li>
+  <li>
+    <p>XZ compression is now supported in most places that can compress or
+decompress data.</p>
+  </li>
+</ul>
+
+<h2 id="configuration">Configuration</h2>
+
+<ul>
+  <li>
+    <p>Added <code>LenskitRecommenderEngineBuilder</code> and
+<code>LenskitRecommenderEngineLoader</code>.</p>
+
+    <ul>
+      <li>
+        <p>Better interface for configuring build &amp; load of recommender engines.</p>
+      </li>
+      <li>
+        <p>Allow multiple configurations to contribute to an engine.</p>
+      </li>
+      <li>
+        <p>Allow configurations to be removed (to remove e.g. DAOs from the model
+graph) and re-added to support building &amp; serializing a model with one
+data access config and loading it with a different one.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Added <code>addComponent</code> methods to configuration contexts (#issue(457)).  This
+is equivalent to binding a component type to itself, using it to supply
+dependencies on itself and any supertypes.</p>
+  </li>
+  <li>
+    <p>RNG now configured via dependency injection.</p>
+  </li>
+  <li>
+    <p>Context-sensitive matches can now be anchored to the root (with <code>at(null)</code>)
+(#issue(344)).</p>
+  </li>
+  <li>
+    <p>Fixed class loader problems with deserializing recommender models
+(#issue(434)).</p>
+  </li>
+  <li>
+    <p>Support compression in recommender model serialization (#issue(527))</p>
+
+    <ul>
+      <li>
+        <p>Support writing recommenders to compressed files.</p>
+      </li>
+      <li>
+        <p>Auto-detect if a serialized recommender stream is compressed.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Use Grapht 0.8.1.</p>
+  </li>
+  <li>
+    <p>Remove <code>@Singleton</code> annotations to fix JEE7 compatibility (#issue(374)).</p>
+  </li>
+</ul>
+
+<h2 id="cli">CLI</h2>
+
+<p>LensKit now has a command-line tool, <code>lenskit</code>, included in the binary
+distribution.  This provides a lot of utilities for working with LensKit data
+and configurations, and is the new entry point for running the evaluator
+(<code>lenskit-eval</code> is now deprecated).</p>
+
+<p>This is in the <code>lenskit-cli</code> package, replacing <code>lenskit-package</code> as the source
+of the binary distribution of LensKit.</p>
+
+<h2 id="algorithms">Algorithms</h2>
+
+<p>This release includes several improvements and additions to LensKit’s selection
+of algorithms.</p>
+
+<ul>
+  <li>
+    <p>Added an implementation of <a href="http://labs.yahoo.com/files/paper.pdf">OrdRec</a>
+(in the <code>lenskit-predict</code> module) (#issue(225)).</p>
+  </li>
+  <li>
+    <p>Report whether the score came from the baseline or primary scorer in the
+fallback item scorer and simple rating predictor (#issue(444)).</p>
+  </li>
+  <li>
+    <p>Add a rescoring item recommender, wrapping an existing item recommender and
+rewriting its scores (#issue(491)).</p>
+  </li>
+  <li>
+    <p>Add <code>RatingPredictorItemScorer</code>, a wrapper that uses the output of a rating
+predictor to produce item scores.  Useful primarily for using things like
+OrdRec for item-scorer-based components.</p>
+  </li>
+  <li>
+    <p><strong>Behavior change:</strong> the default exclude set used by <code>TopNItemRecommender</code>
+now contains all items the user has interacted with, not just the ones they
+have rated.  Baking the knowledge of ratings into the top-N recommender was
+arguably a mistake.</p>
+  </li>
+  <li>
+    <p>Add <code>PrecomputedItemScorer</code>, an item scorer that has a precomputed set of
+scores it can return, and the <code>ExternalProcessItemScorerBuilder</code> to build
+such a scorer by running an external process.</p>
+  </li>
+</ul>
+
+<h3 id="user-user-cf">User-user CF</h3>
+
+<ul>
+  <li>
+    <p>Updated user-user CF to be simpler &amp; make better use of new DAOs
+(#issue(356)).</p>
+  </li>
+  <li>
+    <p>Significantly sped up user-user CF.</p>
+  </li>
+  <li>
+    <p>Added user similarity thresholding.  The default threshold is an absolute
+threshold of 0.0; configure <code>@UserSimilarityThreshold</code> to change this.</p>
+  </li>
+  <li>
+    <p>Add support for a minimum neighborhood size to user-user CF.</p>
+  </li>
+  <li>
+    <p>Remove hard-coded minimum total similarity value from user-user CF.
+Minimum neighborhood sizes and user similarity thresholds cover this case.</p>
+  </li>
+</ul>
+
+<h3 id="item-item-cf">Item-item CF</h3>
+
+<ul>
+  <li>
+    <p>Refactored item-item model build:</p>
+
+    <ul>
+      <li>
+        <p>Build the context with a provider rather than injecting a factory.</p>
+      </li>
+      <li>
+        <p>Use the strategy pattern to abstract sparse vs. non-sparse iteration,
+allowing sparse iteration to be disabled by overriding the default
+provider.</p>
+      </li>
+      <li>
+        <p>Better logging of the item-item model build process.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Configuration change</strong>: qualified <code>ItemItemModelBuilder</code>’s dependency on
+a threshold.  If you previously changed this threshold, you need to qualify
+your threshold implementation (<em>not</em> value) with
+<code>@ItemSimilarityThreshold</code>.</p>
+  </li>
+  <li>
+    <p>Added <code>ItemwizeBuildContextProvider</code> that builds up the item-item build
+context without transposing the ratings matrix (#issue(481)).  If your
+rating normalization is per-item instead of per-user, this allows item-item
+builds to be more efficient.</p>
+  </li>
+</ul>
+
+<h3 id="matrix-factorization">Matrix factorization</h3>
+
+<ul>
+  <li>
+    <p>Refactored FunkSVD to use vectorz vectors and matrices, and have
+factored-out code useful for other matrix factorization recommenders.</p>
+  </li>
+  <li>
+    <p><strong>Configuration change:</strong> the <code>FunkSVDItemScorer</code> no longer returns the
+baseline score for all items. It now only returns scores for user-item
+pairs where the scorer has both a user and item vector. If you were relying
+on the old behavior you can configure a <code>FallbackItemScorer</code> with
+<code>FunkSVDItemScorer</code> as the primary scorer:</p>
+
+    <p><code>groovy
+bind ItemScorer to FallbackItemScorer
+bind (PrimaryScorer, ItemScorer) to FunkSVDItemScorer
+</code></p>
+  </li>
+</ul>
+
+<h2 id="evaluator">Evaluator</h2>
+
+<ul>
+  <li>
+    <p>The evaluator now supports loading algorithms from config files in both
+train-test and graph dumping tasks (#issue(406)).</p>
+  </li>
+  <li>
+    <p>In single-threaded mode, run eval tasks on the same thread as the evaluator
+(#issue(426)).</p>
+  </li>
+  <li>
+    <p>The evaluator now detects when two or more algorithm configurations have
+the same shared components, and only builds those components once.  A cache
+directory can be used to cache these objects on disk; specify this with the
+<code>cache</code> directive in <code>trainTest</code>.  One consequence of this is that build
+times are now meaningless.  This behavior can be disabled, and build times
+restored to meaning, by writing <code>separateAlgorithms true</code> in your
+<code>trainTest</code> block.</p>
+  </li>
+  <li>
+    <p>The evaluator can now configure algorithms from algorithm files.</p>
+  </li>
+  <li>
+    <p>The train-test task can now periodically write status files so its progress
+can be monitored.</p>
+  </li>
+  <li>
+    <p>Crossfolding can now sample users instead of just partitioning them (e.g.
+creating 5 partitions, each with 10% of the users, instead of forcing
+(100/N)%) (#issue(512)).</p>
+  </li>
+  <li>
+    <p>The evaluator supports binary packed files.  The <code>pack</code> task will pack a
+data source, and the crossfolder will split to packed files if the
+train/test file names end with <code>.pack</code>.</p>
+  </li>
+  <li>
+    <p>Fixed escaping of GraphViz output (#issue(528)).</p>
+  </li>
+  <li>
+    <p>Added several Top-<em>N</em> metrics (precision and recall, mean reciprocal rank).</p>
+  </li>
+  <li>
+    <p>We have rewritten the evaluator metric interfaces and implementations to be
+easier to write and test.</p>
+  </li>
+  <li>
+    <p><strong>Output change:</strong> The names of several evaluator output columns have
+changed:</p>
+
+    <ul>
+      <li>
+        <p><code>MAE</code> is now <code>MAE.ByRating</code>.</p>
+      </li>
+      <li>
+        <p>All entropy columns are renamed.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><code>ExecutionInfo</code> now contains more data on the current execution.</p>
+  </li>
+</ul>
+
+<h2 id="data-structures">Data Structures</h2>
+
+<ul>
+  <li>LensKit now uses <a href="http://github.com/mikera/vectorz">vectorz</a> for
+(non-sparse) vectors and matrices.  The <code>Vec</code> class and related classes are
+deprecated and will be removed in LensKit 3.0.</li>
+</ul>
+
+<h2 id="utilities">Utilities</h2>
+
+<ul>
+  <li>Remove <code>TaskGroupRunner</code> in favor of new <code>TaskGraphExecutor</code> class.</li>
+</ul>
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; User-User CF
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<link rel="canonical" href="/documentation/algorithms/user-user/">
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    <h1 id="user-user-collaborative-filtering">User-User Collaborative Filtering</h1>
+
+<p>LensKit provides an implementation of user-user collaborative filtering, the original automatic collaborative filtering algorithm [Resnick et al., 1994].  This code lives in the <code>lenskit-knn</code> module, under the <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/knn/user/package-summary.html">org.grouplens.lenskit.knn.user</a> package.</p>
+
+<h2 id="quick-start">Quick Start</h2>
+
+<p>Configuring <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/knn/user/UserUserItemScorer.html">UserUserItemScorer</a> as your <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/ItemScorer.html">ItemScorer</a> implementation is the main thing to do to use user-user CF.  There are, of course, other knobs you can tweak as well.  This configuration will use a basic user-user collaborative filter with mean-centered cosine similarity and 30 neighbors:</p>
+
+<pre><code class="language-groovy">bind ItemScorer to UserUserItemScorer
+// use item-user mean when user-user fails
+bind (BaselineScorer,ItemScorer) to UserMeanItemScorer
+bind (UserMeanBaseline,ItemScorer) to ItemMeanRatingItemScorer
+// normalize by subtracting the user's mean rating
+within (UserVectorNormalizer) {
+    // for normalization, just center on user means
+    bind VectorNormalizer to MeanCenteringVectorNormalizer
+}
+set NeighborhoodSize to 30
+</code></pre>
+
+<h2 id="configuration-points">Configuration Points</h2>
+
+<p>As with all LensKit algorithms, the user-user CF implementation is highly configurable to allow you to experiment with a wide variety of variants and configurations.  This section describes the primary configuration points for customizing the default components that drive the user-user CF implementation.</p>
+
+<p>Unlike most other algorithms, the user-user filter does not really have a model that is built (though some things such as the global mean rating used by baselines are computed at model build time)</p>
+
+<p>Here are some of the additional configuration points (‘@’ indicates a parameter to be set with <code>set</code> rather than <code>bind</code>):</p>
+
+<ul>
+  <li><a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/transform/normalize/UserVectorNormalizer.html">UserVectorNormalizer</a> — normalizes user rating vectors prior to similarity computation and prediction.</li>
+  <li><a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/knn/user/NeighborhoodFinder.html">NeighborhoodFinder</a> — finds neighborhoods for scoring items.  The default implementation is <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/knn/user/SimpleNeighborhoodFinder.html">SimpleNeighborhoodFinder</a>.  Since LensKit 2.1, you can use <code>SnapshotNeighborhoodFinder</code> to embed an optimized snapshot of the ratings data into the neighborhood finder to improve performance on medium-sized data sets.</li>
+  <li><a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/knn/user/UserSimilarity.html">UserSimilarity</a> — compute similarities between users.  The default implementation, [UserVectorSimilarity][], just compares the users’ vectors using a <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/vectors/similarity/VectorSimilarity.html">vector similarity function</a>; the default vector similarity is <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/vectors/similarity/CosineVectorSimilarity.html">CosineVectorSimilarity</a>.</li>
+</ul>
+
+<p>The normalizers used for prediction (where user ratings are normalized, predictions generated, and then the resulting predictions denormalized) and for comparing users can be configured separately using context-sensitive configuration.  To change the normalization for similarity-finding and leave the predict normalization unchanged, you can do this:</p>
+
+<pre><code class="language-groovy">within (NeighborhoodFinder) {
+    // use default normalizer, which uses a vector normalizer
+    bind UserVectorNormalizer to DefaultUserVectorNormalizer
+    // use the mean-variance normalizer
+    bind VectorNormalizer to MeanVarianceVectorNormalizer
+}
+</code></pre>
+
+<p>Unless you use anchored matching (<code>at</code> instead of <code>within</code>), you need to override the neighborhood finder, not the item scorer, since the item scorer depends on the neighborhood finder.</p>
+
+<h2 id="diagram">Diagram</h2>
+
+<p>The components of the user-user algorithm are shown below:</p>
+
+<p><img src="user-user.svg" alt="User-User Components" /></p>
+
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

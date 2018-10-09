@@ -1,0 +1,8 @@
+#!/bin/sh
+
+basedir="$(dirname "$0")"
+
+A="$1"
+B="$2"
+
+"$basedir/pc-leaves" "$A" |join -t, -v1 -o1.1 - "$B.versions"

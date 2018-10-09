@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; Configuration
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<link rel="canonical" href="/documentation/basics/configuration/">
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    <h1 id="configuring-a-lenskit-recommender">Configuring a LensKit Recommender</h1>
+
+<p>One of LensKit’s goals is to be highly configurable with regards to
+the algorithms used, choice of parameters for them, and various
+algorithmic decisions for each algorithm (e.g. the similarity function
+used for k-NN collaborative filtering, or the normalization applied to
+ratings). <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/core/LenskitRecommenderEngineFactory.html">LenskitRecommenderEngineFactory</a> is the main entry point
+for configuring a recommender.</p>
+
+<p>Recommender configuration is done by selecting the correct
+implementation for various ‘‘components’’ (typically defined by Java
+interfaces), and values for ‘‘parameters’’.  Pretty much every object
+you can interact with in a LensKit recommender is a component, and
+many of them use other components behind the scenes to do their
+work. In the example code in GettingStarted, we find this line:</p>
+
+<pre><code class="language-java">factory.bind(RatingPredictor.class).to(ItemItemRatingPredictor.class);
+</code></pre>
+
+<p>If you are familiar with <a href="http://en.wikipedia.org/wiki/Dependency_injection">dependency injection</a>, particularly
+with <a href="https://code.google.com/p/google-guice/">Guice</a>, this line will look familiar.  What it does is tell
+LensKit that we want to use <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/knn/item/ItemItemRatingPredictor.html">ItemItemRatingPredictor</a> as the
+implementation of the <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/RatingPredictor.html">RatingPredictor</a> component. When our code
+then asks the recommender for a rating predictor, it will use an
+<code>ItemItemRatingPredictor</code>. Likewise, any other components that use a
+<code>RatingPredictor</code>, such as an <code>ItemItemRecommender</code>, will use the
+<code>ItemItemRatingPredictor</code>.</p>
+
+<p>When you look at the JavaDoc for a component implementation, such as
+<a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/knn/item/ItemItemRecommender.html">ItemItemRecommender</a>, you will see that it takes the components it
+uses (its ‘‘dependencies’’) as parameters to its constructor or,
+occasionally, parameters to setter methods. This is because LensKit is
+built using the Dependency Injection design pattern. The
+<code>LenskitRecommenderEngineFactory</code> provides ‘‘automatic dependency
+injection’’, built using the <a href="http://github.com/grouplens/grapht">Grapht</a> dependency injection
+container. It automatically instantiates the various components in
+accordance with the configuration (bindings) you provide in order to
+create the recommender you desire.  Most components and parameters
+have default settings, so LensKit will “just work” if you specify the
+predictor and/or recommender you want to use, but you can always swap
+out components for ones more suited to your application as necessary.</p>
+
+<h3 id="contexts">Contexts</h3>
+
+<p>One feature provided by Grapht, and used heavily by LensKit, is
+‘‘context-sensitive’’ bindings. These are bindings that choose how to
+configure a component based on where that component is being
+used. Formerly, these types of configurations were expressed with role
+annotations; we are moving to heavier use of contexts because they
+provide a cleaner, more easily discoverable solution in most cases.</p>
+
+<p>To bind in a context, use the <code>within</code> method:</p>
+
+<pre><code class="language-java">factory.within(SimpleNeighborhoodFinder.class)
+       .bind(UserVectorNormalizer.class)
+       .to(BaselineSubtractingNormalizer.class);
+</code></pre>
+
+<p>This uses the baseline-subtracting normalizer as the vector
+normalizer, but only when building the <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/knn/user/SimpleNeighborhoodFinder.html">SimpleNeighborhoodFinder</a> or
+one of its dependencies. It does not configure the normalizer passed
+to the rating predictor — if no other bindings are present, then the
+that is kept at the default.</p>
+
+<p>Context-sensitive bindings override other bindings, so if you have a
+non-contextual binding of <code>VectorNormalizer</code>, that binding still
+applies everywhere except where the context is in active — that is,
+everywhere except in <code>SimpleNeighborhoodFinder</code> or one of its
+dependencies. You can have multiple context-based bindings, and you
+can also chain contexts in bindings. The closest, longest matching
+chain of contexts determines the actual binding to use.</p>
+
+<p>Grapht also provides an <code>at</code> method, in addition to <code>within</code>; if you use <code>at</code> instead of <code>within</code>, the resulting bindings are <em>anchored</em>.  Anchored bindings only override direct dependencies of the context they’re applied to, whereas unanchored ones (produced by <code>within</code>) override bindings for transitive dependencies as well.</p>
+
+<h3 id="parameters">Parameters</h3>
+
+<p>LensKit provides many parameters, which are annotated with various
+annotations (such as <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/knn/params/NeighborhoodSize.html">NeighborhoodSize</a>.  These parameters are set
+using the <code>set</code> method:</p>
+
+<pre><code class="language-java">factory.set(NeighborhoodSize.class).to(50);
+</code></pre>
+
+<p>Type safety is somewhat relaxed for parameters, but they are used for
+numeric or occasionally string values.</p>
+
+<h3 id="qualifiers">Qualifiers</h3>
+
+<p>Parameters are a special case of the more general concept of
+‘‘qualifiers’’ — annotations which are annotated with <code>@Qualifier</code>
+from JSR 330, and are used to specify additional distinctions between
+objects. You can bind one using the two-parameter version of <code>bind</code>:</p>
+
+<pre><code class="language-java">factory.bind(Qualifier.class, ComponentType.class)
+       .to(ComponentImpl.class);
+</code></pre>
+
+<p>Alternatively, you can use the <code>withQualifier</code> method of <code>Binding</code>:</p>
+
+<pre><code class="language-java">factory.bind(ComponentType.class)
+       .withQualifier(Qualifier.class)
+       .to(ComponentImpl.class);
+</code></pre>
+
+<p>Qualifiers are used in a couple of places:</p>
+
+<ul>
+  <li>To specify parameters, such as damping terms, that have primitive or
+string values.</li>
+  <li>To distinguish when a class depends on multiple components of the
+same type.</li>
+</ul>
+
+<p>Other DI frameworks, such as Guice, encourage much broader use of qualifiers than we use in LensKit. Contexts provide a preferable solution in many cases.</p>
+
+<h3 id="groovy">Groovy</h3>
+
+<p>LensKit supports a Groovy-based DSL for configuration as well.  This is used in the <a href="../evaluator/">evaluator</a>, and can be used by applications via the <code>lenskit-groovy</code> module.  Here is an example of a configuration in the DSL:</p>
+
+<pre><code class="language-groovy">bind ItemScorer to ItemItemScorer
+within(UserVectorNormalizer) {
+  bind VectorNormalizer to MeanVarianceNormalizer
+}
+</code></pre>
+
+<p>You can load this by using <a href="http://lenskit.org/apidocs/org/grouplens/lenskit/config/ConfigHelpers.html#load%28java.io.File%29">ConfigHelpers.load</a> or the <a href="http://lenskit.org/apidocs/org/grouplens/lenskit/config/ConfigurationLoader.html">ConfigurationLoader</a> class.</p>
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

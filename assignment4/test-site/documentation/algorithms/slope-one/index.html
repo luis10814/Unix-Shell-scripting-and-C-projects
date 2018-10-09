@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; Slope-One
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<link rel="canonical" href="/documentation/algorithms/slope-one/">
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    <h1 id="slope-one-recommenders">Slope-One Recommenders</h1>
+
+<p>LensKit provides an implementation of the <a href="http://arxiv.org/abs/cs/0702144">Slope One</a> rating prediction algorithm as part of the <code>lenskit-slopeone</code> module, in the <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/slopeone/package-summary.html">org.grouplens.lenskit.slopeone</a> package.</p>
+
+<h2 id="quick-start">Quick Start</h2>
+
+<p>The simplest way to use the Slope One algorithm in a recommender is to bind the <code>ItemScorer</code> class to <code>SlopeOneItemScorer</code>. A simple configuration for a Slope One recommender is given below:</p>
+
+<pre><code class="language-groovy">bind ItemScorer to SlopeOneItemScorer
+bind (BaselineScorer,ItemScorer) to UserMeanItemScorer
+bind (UserMeanBaseline,ItemScorer) to ItemMeanRatingItemScorer
+set DeviationDamping to 0.0d
+</code></pre>
+
+<h2 id="using-the-weighted-slope-one-algorithm">Using the Weighted Slope One Algorithm</h2>
+
+<p>LensKit also offers an improved version of the standard Slope One algorithm that accounts for the number of coratings for each item pair. Items with more coratings are then weighted more heavily when the algorithm generates rating predictions. This version of the algorithm is implemented by the <code>WeightedSlopeOneItemScorer</code>.</p>
+
+<h2 id="model-builder">Model Builder</h2>
+
+<p>The backing <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/slopeone/SlopeOneModel.html">SlopeOneModel</a> is produced by the <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/slopeone/SlopeOneModelBuilder.html">SlopeOneModelBuilder</a> by default. This is configurable, meaning an alternate builder may be used if desired.</p>
+
+<p>The <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/slopeone/SlopeOneModel.html">SlopeOneModel</a> consists of two matrices, one to store deviation values and another to store corating counts for each item pair. The same model can be used for both the normal and weighted variants of the Slope One algorithm.</p>
+
+<h2 id="other-configuration-points">Other Configuration Points</h2>
+
+<ul>
+  <li><code>@DeviationDamping</code>: The only configurable parameter for Slope One is <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/slopeone/DeviationDamping.html">Deviation Damping</a>. This is a constant value that is added to the number of coratings when calculating the deviation of an item pair. The default value for this parameter is 0.</li>
+</ul>
+
+<h2 id="diagram">Diagram</h2>
+
+<p><img src="slope-one.svg" alt="Slope-One object diagram" /></p>
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

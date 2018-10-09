@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; lenskit(1)
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    <h1 id="lenskit">lenskit</h1>
+
+<h2 id="name">Name</h2>
+
+<p><em>lenskit</em> - a command-line tool for LensKit</p>
+
+<h2 id="synopsis">Synopsis</h2>
+
+<p><strong>lenskit</strong> [OPTIONS] <em>subcommand</em> [arguments]</p>
+
+<h2 id="description">Description</h2>
+
+<p>The LensKit command line tool provides several capabilities for examining, evaluating, and using
+LensKit recommender algorithms.  It primarily operates on LensKit algorithm configurations and
+eval scripts written in the corresponding Groovy DSLs.</p>
+
+<p>The various specific tools are exposed via subcommands, much like <strong>git</strong>(1) and similar tools.
+The subcommands are listed below (see <a href="#Subcommands">Subcommands</a>), and each is described in more
+detail in its own manual page.</p>
+
+<h2 id="options">Options</h2>
+
+<dl>
+  <dt>–help</dt>
+  <dd>Print usage instructions.</dd>
+  <dt>–log-file <em>FILE</em></dt>
+  <dd>Write logging output to <em>FILE</em>.</dd>
+  <dt>-d, –debug</dt>
+  <dd>Increase verbosity, printing debug messages to the console.  By default, only messages at INFO
+and higher levels are logged.  The log file, if specified, always receives debug-level output.</dd>
+  <dt>–debug-grapht</dt>
+  <dd>Output INFO (or DEBUG, if <strong>–debug</strong> is also used) logging messages from Grapht.  Grapht is
+pretty noisy, so by default its output is filtered to warnigns and errors.  If you need to
+debug a problem that is occurring in Grapht, use this option.</dd>
+</dl>
+
+<h2 id="subcommands">Subcommands</h2>
+
+<p>Each command is documented in its own man page, <em>lenskit-command</em>(1).</p>
+
+<dl>
+  <dt><a href="lenskit-version.1.html">version</a></dt>
+  <dd>Print the LensKit version.</dd>
+  <dt><a href="lenskit-train-model.1.html">train-model</a></dt>
+  <dd>Train a recommender model and save it to disk.</dd>
+  <dt><a href="lenskit-predict.1.html">predict</a></dt>
+  <dd>Predict user ratings for items, using a configuration or a trained model.</dd>
+  <dt><a href="lenskit-recommend.1.html">recommend</a></dt>
+  <dd>Recommend items for users, using a configuration or a trained model.</dd>
+  <dt><a href="lenskit-graph.1.html">graph</a></dt>
+  <dd>Output a GraphViz diagram of a recommender configuration (either from configuration files or a
+trained model).</dd>
+  <dt><a href="lenskit-eval.1.html">eval</a></dt>
+  <dd>Run a LensKit evaluation script.</dd>
+  <dt><a href="lenskit-pack-ratings.1.html">pack-ratings</a></dt>
+  <dd>Pack rating data into a binary file for more efficient access.</dd>
+</dl>
+
+<h2 id="environment-and-system-properties">Environment and System Properties</h2>
+
+<p>The LensKit CLI (or its launcher script) recognize the following environment variables:</p>
+
+<dl>
+  <dt>JAVA_OPTS</dt>
+  <dd>Additional flags to pass to the JVM (such as <code>-Xmx4g</code> to set the memory limit).</dd>
+  <dt>JAVA_HOME</dt>
+  <dd>Where to find the Java Runtime Environment.</dd>
+</dl>
+
+<p>Also, the following Java system properties can be set for useful effects:</p>
+
+<dl>
+  <dt>logback.configurationFile</dt>
+  <dd>The location of a Logback configuration file.  This overrides all built-in or command line
+logging configuration.</dd>
+</dl>
+
+<h2 id="see-also">See Also</h2>
+
+<ul>
+  <li>Man pages for subcommands: <a href="lenskit-version.1.html"><strong>lenskit-version</strong>(1)</a>,
+<a href="lenskit-train-model.1.html"><strong>lenskit-train-model</strong>(1)</a>,
+<a href="lenskit-predict.1.html"><strong>lenskit-predict</strong>(1)</a>,
+<a href="lenskit-recommend.1.html"><strong>lenskit-recommend</strong>(1)</a>,
+<a href="lenskit-graph.1.html"><strong>lenskit-graph</strong>(1)</a>,
+<a href="lenskit-eval.1.html"><strong>lenskit-eval</strong>(1)</a>,
+<a href="lenskit-pack-ratings.1.html"><strong>lenskit-pack-ratings</strong>(1)</a></li>
+  <li>The <a href="http://lenskit.grouplens.org">LensKit home page</a></li>
+  <li>The <a href="http://github.com/grouplens/lenskit/wiki/Manual">LensKit manual</a></li>
+</ul>
+
+<h2 id="project-information">Project Information</h2>
+
+<p>This command is a part of LensKit, an open source recommender systems toolkit
+developed by <a href="http://grouplens.org">GroupLens Research</a>.
+Copyright 2010-2014 Regents of the University of Minnesota and contributors.</p>
+
+<p>Work on LensKit has been funded by the National Science Foundation under
+grants IIS 05-34939, 08-08692, 08-12148, and 10-17697.</p>
+
+<p>This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as
+published by the Free Software Foundation; either version 2.1 of the
+License, or (at your option) any later version.</p>
+
+<p>This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+details.</p>
+
+<p>You should have received a copy of the GNU General Public License along with
+this program; if not, write to the Free Software Foundation, Inc., 51
+Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</p>
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

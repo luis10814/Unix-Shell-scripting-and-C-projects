@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; Versioning
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<link rel="canonical" href="/documentation/versioning/">
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    <h1 id="versioning-and-api-change-policy">Versioning and API change policy</h1>
+
+<p>LensKit strives to maintain a high degree of compatibility, particularly
+for client code (code using the recommenders).</p>
+
+<p>We define the following use cases:</p>
+
+<dl>
+  <dt>Clients</dt>
+  <dd>Client code is code that uses the LensKit APIs and algorithms
+to provide recommendation services. It does not implement any LensKit
+interfaces, other than perhaps the DAO.</dd>
+  <dt>Implementers</dt>
+  <dd>Implementation code implements various LensKit APIs to provide
+new algorithms. It may implement individual components of existing algorithms,
+or reuse their components.</dd>
+  <dt>Extenders</dt>
+  <dd>Extension code is level most closely coupled to LensKit’s internals.
+This is code that derives from the classes inside LensKit algorithm implementations,
+is closely tied to them (re-implementing particularly internal components, etc.),
+or extends the evaluator.</dd>
+</dl>
+
+<p>LensKit version numbers have three components, <em>Major.Minor.Patch</em>. The
+versioning is based on <a href="http://semver.org">Semantic Versioning</a>, adapted
+for the needs of a framework and toolkit.</p>
+
+<ul>
+  <li>
+    <p>For all components, binary- and source-incompatible changes will result in
+at least a minor version increase (1.x). 1.x.y releases, where y≥1, will only
+be bug fixes.</p>
+  </li>
+  <li>
+    <p>Client code may need to update its recommender configurations across minor (1.x)
+releases, but we will seek to minimize these changes and clearly document
+any necessary changes in the release notes.</p>
+  </li>
+  <li>
+    <p>Types designated “Compatibility: Public” will only have source- or binary-incompatible
+changes for client code in new major releases of LensKit. Incompatible changes for
+implementers or extenders will be associated with new minor versions and clearly
+identified in the release notes.</p>
+  </li>
+</ul>
+
+<h2 id="serialization">Serialization</h2>
+
+<p>LensKit makes no attempt to allow models built and serialized with version 1.x
+to be read in version 1.y, where x ≠ y.  We attempt to keep bug fix releases
+serialization-compatible, but if a serialization break is necessary to fix a
+bug, we will break the class (and document such incompatibility in the release
+notes).</p>
+
+<h2 id="deprecation">Deprecation</h2>
+
+<p>As we develop LensKit, we deprecate methods (and entire classes) from time to
+time.  To preserve backwards compatibility, when these methods appear on
+“Compatibility: Public” components, they will stick around until the next major
+release. However, they <strong>will</strong> be deleted in the next major release.
+Deprecated methods on more internal/unstable components may be deleted in a
+subsequent minor release.</p>
+
+<p>Our goal is for all X.0 releases of LensKit to contain no deprecated methods.</p>
+
+<p>Also, if we intend to replace a method with an incompatible method of the same
+name in the next X.0 release, we we’ll try to make sure that method either
+changes its signature or gets deprecated in a minor release in advance of the
+major release. So it’s good, as you update your LensKit-based code, to clear up
+deprecation warnings when you upgrade to a new LensKit version, but we’ll keep
+the methods around and working.</p>
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+</body>
+</html>

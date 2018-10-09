@@ -1,0 +1,8 @@
+#!/bin/sh
+
+base="$(dirname "$0")"
+
+"$base/pc-list-packages" |while read pkg ver; do
+    echo pkg "$pkg" "$ver"
+    "$base/pc-get-deps" "$pkg" |sed -e 's/^/dep /'
+done

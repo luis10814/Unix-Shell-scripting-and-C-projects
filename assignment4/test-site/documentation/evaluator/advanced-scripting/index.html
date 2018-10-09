@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; Advanced Evaluator Scripting
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<link rel="canonical" href="/documentation/evaluator/advanced-scripting/">
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    <h1 id="advanced-evaluator-scripting">Advanced Evaluator Scripting</h1>
+
+<p>The evaluation scripts are actually Groovy scripts, using an embedded
+domain-specific language (EDSL) for evaluating recommenders provided as a part
+of the LensKit evaluation framework.  Simple scripts look a lot like sectioned
+key-value configuration files, but if you have more sophisticated evaluation
+needs, the full power of Groovy is available.</p>
+
+<h2 id="running-scripts">Running Scripts</h2>
+
+<p>Scripts are run with the <code>lenskit eval</code> command from the LensKit command line
+interface.  It can also be run from tools like Gradle and Ant with the
+<code>org.grouplens.lenskit.cli.Main</code> class.</p>
+
+<p><code>lenskit eval</code> is modeled after tools like Make and Ant.  If you give it no
+arguments, it runs the script <code>eval.groovy</code> in the current directory.  You can
+tell it to run a specific script file with the <code>-f</code> command line option.</p>
+
+<h2 id="targets">Targets</h2>
+
+<p>LensKit eval scripts can also define <em>targets</em> to allow complex evaluations to be run in a piecewise fashion.  A target is just like a target in other tools like Ant and make: it is a named sequence of tasks to run.  Targets can also depend on other targets.</p>
+
+<p>Here’s a rewrite of the <a href="../quickstart/">example script</a> to use targets:</p>
+
+<pre><code class="language-groovy">import org.grouplens.lenskit.knn.item.*
+import org.grouplens.lenskit.baseline.*
+import org.grouplens.lenskit.transform.normalize.*
+
+// use the target method to define a target
+def ml100k = target("crossfold") {
+    crossfold("ml-100k") {
+        source csvfile("ml-100k/u.data") {
+            delimiter "\t"
+            domain {
+                minimum 1.0
+                maximum 5.0
+                precision 1.0
+            }
+        }
+    }
+}
+
+target("evaluate") {
+    // require the crossfold target to be run first
+    // can also require it by name
+    requires ml100k
+
+    trainTest("item-item algorithm") {
+        dataset ml100k
+   
+        algorithm("PersMean") {
+            bind ItemScorer to UserMeanItemScorer
+            bind (UserMeanBaseline, ItemScorer) to ItemMeanRatingItemScorer
+        }
+
+        algorithm("ItemItem") {
+            bind ItemScorer to ItemItemScorer
+            bind UserVectorNormalizer to BaselineSubtractingUserVectorNormalizer
+            within (UserVectorNormalizer) {
+                bind (BaselineScorer, ItemScorer) to ItemMeanRatingItemScorer
+           }
+        }
+
+        metric CoveragePredictMetric
+        metric RMSEPredictMetric
+        metric NDCGPredictMetric
+
+        output "eval-results.csv"
+    }
+}
+
+defaultTarget "evaluate"
+</code></pre>
+
+<p>In this version, the actual tasks from before — <code>trainTest</code> and <code>crossfold</code> — are not run immediately.  They are run when the targets containing them are run.</p>
+
+<p>If you run <code>lenskit-eval</code> with no arguments, this script will run as before.  That is because it specifies a default target of <code>evaluate</code>.  But you can just crossfold, without the actual recommender evaluation:</p>
+
+<pre><code>lenskit-eval crossfold
+</code></pre>
+
+<p>The <code>requires</code> directive specifies that the <code>evaluate</code> target depends on the <code>crossfold</code> target (saved as the variable <code>ml100k</code>) must be run first.  You can depend on a target either by name (<code>crossfold</code>) or by object; the <code>target</code> command returns a target object that can be used for this purpose.  The object can also be used to access the data returned by its last task: this is why <code>dataset ml100k</code> works, even though <code>ml100k</code> is a target.  Its last task is <code>crossfold</code>, which returns a list of data sets, and <code>dataset ml100k</code> arranges for these data sets to be configured once the <code>crossfold</code> target has been run so its output is available.</p>
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

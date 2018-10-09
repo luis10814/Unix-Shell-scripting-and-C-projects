@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; Evaluator Data Processing
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<link rel="canonical" href="/documentation/evaluator/data/">
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    <h1 id="data-processing-in-the-evaluator">Data Processing in the Evaluator</h1>
+
+<h2 id="additional-cross-folding-options">Additional Cross-Folding Options</h2>
+
+<p>Crossfolding (the <code>crossfold</code> command) is implemented by <a href="http://lenskit.org/apidocs/org/grouplens/lenskit/eval/data/crossfold/CrossfoldTask.html">CrossfoldTask</a>.  It supports several additional directives to control its behavior:</p>
+
+<ul>
+  <li><code>source</code>: the input data</li>
+  <li><code>partitions</code>: the number of train-test splits to create.</li>
+  <li><code>holdout N</code>: hold out <em>N</em> items per user.</li>
+  <li><code>retain N</code>: retain <em>N</em> items per user (holding out all other items).</li>
+  <li><code>holdoutFraction f</code>: hold out a fraction <em>f</em> of each user’s items.</li>
+  <li><code>method</code>: specify the  <a href="http://lenskit.org/apidocs/org/grouplens/lenskit/eval/data/crossfold/TimestampOrder.html">crossfold method</a>.</li>
+  <li><code>sampleSize N</code>: For sampling-based crossfold methods, the size of each sample.</li>
+  <li><code>order</code>: specify an ordering for user items prior to holdout. Can be either <a href="http://lenskit.org/apidocs/org/grouplens/lenskit/eval/data/crossfold/RandomOrder.html">RandomOrder</a> for random splitting or <a href="http://lenskit.org/apidocs/org/grouplens/lenskit/eval/data/crossfold/TimestampOrder.html">TimestampOrder</a> for time-based splitting.</li>
+  <li><code>name</code>: a name for the data source, used for referring to the task &amp; the default output names. The string parameter to the crossfold directive, if provided, sets the name.</li>
+  <li><code>train</code>: a format string taking a single integer specifying the name of the training data output files, e.g. <code>ml-100k.train.%d.csv</code>. The default is <code>name + ".train.%d.csv"</code>. The format string is applied to the number of the partition.</li>
+  <li><code>test</code>: same as <code>train</code>, but for the test set.</li>
+</ul>
+
+<p>The crossfold task, when executed, returns a list of <a href="http://lenskit.org/apidocs/org/grouplens/lenskit/eval/data/traintest/TTDataSet.html">TTDataSet</a>s representing the different train-test partitions.</p>
+
+<h2 id="crossfolding-methods">Crossfolding Methods</h2>
+
+<p>The crossfold task supports three crossfolding methods (see <a href="http://lenskit.org/apidocs/org/grouplens/lenskit/eval/data/crossfold/TimestampOrder.html">CrossfoldMethod</a>():</p>
+
+<ul>
+  <li><code>PARTITION_RATINGS</code> splits the ratings into <em>K</em> partitions, with the test set
+consisting of the ratings in that partition and the train set consisting of
+the remainder of the ratings.</li>
+  <li><code>PARTITION_USERS</code> partitions the users into <em>K</em> partitions.  For each
+partition, the test set consists of the held out ratings for the users in
+that partition (as specified by <code>holdout</code>, <code>holdoutFraction</code>, or <code>retain</code>
+parameters).  The training set consists of the remaining ratings for those
+users, along with all ratings from the users in other partitions.</li>
+  <li><code>SAMPLE_USERS</code> works like <code>PARTITION_USERS</code>, except that it produces <em>K</em>
+disjoint samples of <em>M</em> users each (where <em>M</em> is specified by <code>sampleSize</code>)
+instead of partitioning all users into disjoint sets.</li>
+</ul>
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

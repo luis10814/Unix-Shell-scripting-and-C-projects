@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; Release 1.1
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+<ul class="side-nav">
+  <li class="heading"><a href="/releases/" data-match="exact">Releases</a>
+  
+  <li><a href="/releases/lenskit-2.2.html">Release 2.2
+    (in progress)
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.1.html">Release 2.1
+    (latest)
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.5.html">Release 2.0.5
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.4.html">Release 2.0.4
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.3.2.html">Release 2.0.3.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.3.html">Release 2.0.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.2.html">Release 2.0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.1.html">Release 2.0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-2.0.html">Release 2.0
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.3.html">Release 1.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.2.html">Release 1.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.1.html">Release 1.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.0.2.html">Release 1.0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.0.1.html">Release 1.0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-1.0.html">Release 1.0
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.11.html">Release 0.11
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.1.html">Release 0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.9.html">Release 0.9
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.8.html">Release 0.8
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.7.html">Release 0.7
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.6.html">Release 0.6
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.5.html">Release 0.5
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.4.html">Release 0.4
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.3.html">Release 0.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.2.html">Release 0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.1.html">Release 0.1
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.0.3.html">Release 0.0.3
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.0.2.html">Release 0.0.2
+    
+  </a>
+  
+  <li><a href="/releases/lenskit-0.0.1.html">Release 0.0.1
+    
+  </a>
+  
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    <h1>Release notes for LensKit 1.1</h1>
+
+
+
+
+<p>
+The 
+<a href="https://github.com/grouplens/lenskit/commits/lenskit-1.1">Git changelog</a>
+
+
+and the <a href="https://github.com/grouplens/lenskit/issues?q=milestone:1.1+is:closed">list of closed tickets and pull requests</a> provide
+
+more information on what has happened, including bugs that have been fixed.
+</p>
+
+<p>This release requires some recommender configuration changes, as
+well as changes to any custom components depending on LensKit
+parameter annotations; see
+<a href="http://bitbucket.org/grouplens/lenskit/wiki/UpgradingTo11">Upgrading to LensKit 1.1</a> for details on how to do this.</p>
+
+<p>There are quite a few changes in LensKit 1.1; this list is not
+exhaustive, but tries to capture highlights and things that will
+affect current users.</p>
+
+<ul>
+  <li>
+    <p>Made <code>Recommender</code> extend <code>Closeable</code> (#issue(315)).</p>
+  </li>
+  <li>
+    <p>Added side channel support to sparse vectors (#issue(185)).</p>
+  </li>
+  <li>
+    <p>Added support for <strong>at</strong> context matchers (via Grapht), to make it easier to configure
+complex configurations. See the <a href="http://bitbucket.org/grouplens/lenskit/wiki/Configuration">manual</a>
+for more details.</p>
+  </li>
+  <li>
+    <p>Made <code>SparseVector</code> constructors package-private.  Sparse vectors shouldn’t be
+subclassed by any additional classes.</p>
+  </li>
+  <li>
+    <p><strong>Config change</strong>: introduced <code>predict</code> methods to
+<code>RatingPredictor</code>, deprecating the fact that it extends
+<code>ItemScorer</code> (#issue(164)).  As a result, all algorithm item
+scorers now implement <code>ItemScorer</code>, <em>not</em>
+<code>RatingPredictor</code>, and new rating predictors fill in the old
+jobs.  The <a href="http://github.com/grouplens/lenskit/wiki/UpgradingTo11">upgrading
+guide</a>,
+#164, and #311 contain more details.</p>
+  </li>
+  <li>
+    <p><strong>Incompatible change</strong>: moved abstract and simple/score-based implementations of basic
+recommender components to the new package <code>o.g.l.basic</code>.  This should only be incompatible
+for people implementing new LensKit components.</p>
+  </li>
+  <li>
+    <p><strong>Config change</strong>: Removed dedicated <code>params</code> packages, moving parameters
+to saner locations (#issue(294)).  See the <a href="http://bitbucket.org/grouplens/lenskit/wiki/UpgradingTo11}">upgrading
+guide</a> for
+details.</p>
+  </li>
+  <li>
+    <p>Many little cleanups and bug-fixes.</p>
+  </li>
+  <li>
+    <p>Lots more automatic testing support.</p>
+  </li>
+</ul>
+
+<h2 id="algorithms">Algorithms</h2>
+
+<ul>
+  <li>
+    <p>Item-item scorers now report the number of neighbors used for each score as
+a side channel.</p>
+  </li>
+  <li>
+    <p>Deprecated algorithm-specific item recommenders in favor of using
+<code>ScoreBasedItemRecommender</code> directly.</p>
+  </li>
+  <li>
+    <p>Added <code>LeastSquaresPredictor</code>, a baseline predictor that uses gradient descent to
+train per-item and per-user baseline values (à la Koren et al.).</p>
+  </li>
+</ul>
+
+<h3 id="k-nn-recommenders">k-NN Recommenders</h3>
+
+<ul>
+  <li>
+    <p><strong>Default change</strong>: changed default <code>ModelSize</code> to 0 (all neighbors retained); by
+default, item-item models now retain all neighbors with nonnegative similarities.</p>
+  </li>
+  <li>
+    <p><strong>Default change</strong>: Changed the default value for <code>ModelSize</code> to 20 (was 30).</p>
+  </li>
+  <li>
+    <p>Refactored the item-item recommender to get rid of
+<code>ItemItemModelBackedScorer</code>, simplifying the class hierarchy
+and configuration.</p>
+  </li>
+  <li>
+    <p>Replaced <code>LongScoredList</code> with a list of <code>ScoredId</code> objects in Item-Item
+model construction to support side channels (#issue(219)).</p>
+  </li>
+</ul>
+
+<h3 id="funk-svd">Funk-SVD</h3>
+
+<ul>
+  <li>
+    <p><strong>Incompatible change</strong>: moved iterative support code to <code>o.g.l.iterative</code> and
+changed parameters. The <code>StoppingCondition</code> interface and implementations now live
+in this package; common iterative method parameters are now defined by annotations in
+<code>o.g.l.iterative</code>.</p>
+
+    <ul>
+      <li>
+        <p><code>IterationCount</code> is moved to the new package.</p>
+      </li>
+      <li>
+        <p><code>MinimumIterations</code> is moved to the new package.</p>
+      </li>
+      <li>
+        <p>Threshold stopping conditions now use <code>StoppingThreshold</code> in this package instead
+of <code>ThresholdValue</code>.  If you configure the threshold value, update your configuration
+accordingly.</p>
+      </li>
+      <li>
+        <p>The FunkSVD <code>LearningRate</code> and <code>RegularizationTerm</code> have been moved to
+the new iterative parameters package.</p>
+      </li>
+      <li>
+        <p><strong>Config change</strong>: Changed the default value for <code>MinimumIterations</code> to 10.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Added several new configuration points to the Funk-SVD model builder</p>
+  </li>
+</ul>
+
+<h2 id="evaluator">Evaluator</h2>
+
+<ul>
+  <li>
+    <p><code>TrainTestEvalCommand</code> now returns <code>Table</code>, not <code>TableImpl</code>.</p>
+  </li>
+  <li>
+    <p>Eval configuration changes</p>
+
+    <ul>
+      <li>
+        <p>Force and thread count are now runtime parameters, not script parameters. Specify
+them with <code>--force</code> and <code>--thread-count</code> command line options, or the
+corresponding eval mojo options.</p>
+      </li>
+      <li>
+        <p>Commands receive the eval configuration via the <code>setConfig</code> method.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Added a <code>trainModel</code> command that trains a model and applies
+arbitrary functions to it.</p>
+  </li>
+  <li>
+    <p>Table changes:</p>
+
+    <ul>
+      <li>
+        <p>Tables now live in <code>o.g.l.util.table</code>.</p>
+      </li>
+      <li>
+        <p><code>TableImpl</code> is now package-private and immutable; use <code>TableBuilder</code> to
+build a table.</p>
+      </li>
+      <li>
+        <p><code>InMemoryWriter</code> is replaced with <code>TableBuilder</code>, which implements <code>TableWriter</code>.</p>
+      </li>
+      <li>
+        <p>Table layouts now live directly in the table package.</p>
+      </li>
+      <li>
+        <p>Table writers now live in <code>o.g.l.util.table.writer</code>.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Many improvements to the <code>dumpGraph</code> command (#issue(264)).</p>
+  </li>
+  <li>
+    <p><code>AbstractCommand</code> now allows for the name to be null, although
+null names can never be exposed to callers.</p>
+  </li>
+  <li>
+    <p>Added
+<a href="../lenskit-eval-maven-plugin/run-r-mojo.html"><code>run-r</code></a> goal
+to the Maven plugin to run R.</p>
+  </li>
+  <li>
+    <p>Added the <code>lenskit-publish</code> phase to the LensKit evaluation
+lifecycle as a place to hook in and generate reports that use the
+output of <code>lenskit-analyze</code>.</p>
+  </li>
+  <li>
+    <p>Added the <code>subsample</code> command to subsample a data set.</p>
+  </li>
+</ul>
+
+<h3 id="train-test-evaluator">Train-Test Evaluator</h3>
+
+<ul>
+  <li>
+    <p>Train-test evaluator always runs, even if output is up-to-date
+with respect to input; use the <code>lenskit.eval.skip</code> Maven
+property to disable the evaluator when running it via Maven and
+you only want to run post-eval analysis phases.</p>
+  </li>
+  <li>
+    <p>Train-test evaluator now has <code>predictionChannel</code> directive to
+write side channel values out to the prediction output file.</p>
+  </li>
+  <li>
+    <p>Added <code>retain</code> directive to the <code>trainTest</code> command to retain a fixed number
+of items per user.</p>
+  </li>
+  <li>
+    <p>Deprecated the <code>holdout</code> directive on <code>trainTest</code> that takes a fraction in favor
+of the clearer <code>holdoutFraction</code> directive.</p>
+  </li>
+  <li>
+    <p>Add the ability for <code>metric</code> to take an arbitrary function to
+compute metrics over an algorithm, and <code>multiMetric</code> to
+compute multiple metrics per algorithm.</p>
+  </li>
+  <li>
+    <p>Added the <code>externalAlgorithm</code> directive to allow algorithms
+implemented in external processes to be evaluated.</p>
+  </li>
+</ul>
+
+<h2 id="archetypes">Archetypes</h2>
+
+<ul>
+  <li>
+    <p>Added
+<a href="../lenskit-archetype-fancy-analysis/">lenskit-archetype-fancy-analysis</a>
+archetype to provide a template for more sophisticated LensKit
+experimental setups.</p>
+  </li>
+  <li>
+    <p>Improved the simple archetype to use the new R mojo.</p>
+  </li>
+</ul>
+
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+basedir="$(dirname "$0")"
+
+NAME="$1"
+
+cut -d, -f2 "$NAME.deps" |sort -u |join -v1 -t, "$NAME.versions" - |cut -d, -f1

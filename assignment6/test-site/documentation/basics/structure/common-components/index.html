@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; Common Components
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<link rel="canonical" href="/documentation/basics/structure/common-components/">
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    <h1 id="common-lenskit-components">Common LensKit Components</h1>
+
+<p>LensKit is organized around <em>components</em>, which provide various services related to recommendation. A recommender itself provides many components; <a href="../../configuration/">configuring a recommender</a> selects the implementations and parameters of the various components.</p>
+
+<h2 id="public-components">Public Components</h2>
+
+<p>Certain components, defined in the <code>lenskit-api</code> module, are commonly provided by many recommender configurations and are considered part of LensKit’s public API. These components are accessed via the getter methods on the <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/Recommender.html">Recommender</a> interface, and are intended to be implementable without the rest of LensKit (e.g. as a shim on top of <a href="http://mahout.apache.org">Mahout</a>).  Full documentation is available in the JavaDoc for the <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/package-summary.html">org.grouplens.lenskit</a> package.</p>
+
+<ul>
+  <li>An <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/data/pref/PreferenceDomain.html">ItemScorer</a> computes user-specific scores for items. These scores represent some concept of relevance or usefulness of the item to the user, with higher scores being more relevant.  The interface itself makes no particular guarantees about the range or interpretation of the scores, other than that higher scores are in some sense better; the specific implementation that is configured may provide additional guarantees.</li>
+  <li>A <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/RatingPredictor.html">RatingPredictor</a> predicts preferences, in the same scale as the ratings the system collects from users.  This interface is similar to  <code>ItemScorer</code>.  The default implementation, <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/basic/SimpleRatingPredictor.html">SimpleRatingPredictor</a>, wraps the item scorer and clamps its scores to the rating range (if one is specified; if no <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/ItemScorer.html">PreferenceDomain</a> is configured, the scores are used unclamped).  The default rating predictor also supports a baseline item scorer, annotated with <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/baseline/BaselineScorer.html">@BaselineScorer</a>, that it consults for items for which the primary item scorer does not return a score.</li>
+  <li>An <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/ItemRecommender.html">ItemRecommender</a> recommends items for a user.  The default implementation, <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/basic/TopNItemRecommender.html">TopNItemRecommender</a>, returns the top <em>N</em> items as scored by the item scorer.</li>
+  <li>The <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/GlobalItemScorer.html">GlobalItemScorer</a> interface is like <code>ItemScorer</code>, except it scores items with respect to an item (or set of items) but ‘‘not’’ with respect to a user.  It, along with related interfaces <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/GlobalRatingPredictor.html">GlobalRatingPredictor</a> and <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/GlobalItemRecommender.html">GlobalItemRecommender</a>, is useful for producing global statistic scores for new users, or for doing “people who bought the items in your shopping cart also bought X, Y, or Z” recommendations.</li>
+</ul>
+
+<p><a href="../../algorithms/">Individual algorithms</a> define many of their own internal components.  <a href="..">Recommender Structure</a> discusses in more detail the relationships of various components to build a full recommender configuration.</p>
+
+<h2 id="internal-components">Internal Components</h2>
+
+<p>In addition to the public components, LensKit also provides many other components that are used in the LensKit implementations of the public components. These components can be accessed with the <code>get</code> method on <a href="http://lenskit.grouplens.org/apidocs/org/grouplens/lenskit/core/LenskitRecommender.html">LenskitRecommender</a>.</p>
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+#!/bin/sh
+
+rpm_list()
+{
+    exec rpm -qa --qf '%{name},%{evr}\n'
+}
+
+mf_list()
+{
+    mf_file="$1"
+    while read dir name ver; do
+        if [ X"$dir" = Xpkg ]; then
+            printf "%s,%s\n" "$name" "$ver"
+        fi
+    done <"$mf_file"
+}
+
+if [ -z "$PKGMF" ]; then
+    rpm_list
+else
+    mf_list "$PKGMF"
+fi

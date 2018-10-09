@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  
+  LensKit &mdash; Recommender Structure
+  
+</title>
+<link rel="icon" type="image/png" href="/s/lenskit-mini.png">
+<link rel="stylesheet" href="/s/master.css">
+<link rel="stylesheet" href="/s/fonts/liberation/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/pt-sans/stylesheet.css">
+<link rel="stylesheet" href="/s/fonts/inconsolata/stylesheet.css">
+<link rel="stylesheet" href="/bower_components/highlightjs/styles/github.css">
+
+
+<link rel="canonical" href="/documentation/basics/structure/">
+
+<script src="bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    
+    <li class="name">
+    <h1><a href="/">LensKit</a></h1>
+    </li>
+    
+  </ul>
+  <section class="top-bar-section" id="site-menu">
+    <ul class="right">
+      <li><a href="/news/">News</a>
+      <li><a href="/download/">Download</a>
+      <li class="has-dropdown">
+        <a href="/documentation/" data-match="re:^/(documentation|releases)/">Documentation</a>
+        <ul class="dropdown">
+          <li><a href="/documentation/basics/">LensKit Basics</a>
+          <li><a href="/documentation/algorithms/">Algorithms</a>
+          <li><a href="/documentation/evaluator/">Evaluator</a>
+          <li><a href="/documentation/cli/">CLI Tools</a>
+          <li><a href="/apidocs/">API Documentation</a>
+        </ul>
+      <li><a href="/research/">Research</a>
+      <li><a href="/connect/">Connect</a>
+    </ul>
+  </section>
+</nav>
+
+</div>
+
+<div class="row">
+  
+  
+  <nav class="sidebar medium-3 columns">
+    <ul class="side-nav">
+  <li class="heading"><a href="/documentation/" data-match="exact">Documentation</a>
+  <li><a href="/documentation/basics/">LensKit Basics</a>
+  <li><a href="/documentation/algorithms/">Algorithms</a>
+  <li><a href="/documentation/evaluator/">Evaluator</a>
+  <li><a href="/documentation/cli/">CLI Tools</a>
+  <li><a href="/documentation/versioning/">Versioning</a>
+  <li><a href="/releases/">Release Notes</a>
+  <li><a href="/apidocs/">API Docs (2.1)</a>
+  
+  <li><a href="/next/apidocs/">API Docs (milestone 2.2-M3)</a>
+  
+  <li><a href="/master/apidocs/">API Docs (development)</a>
+</ul>
+
+  </nav>
+  
+  <article class="main medium-9 columns">
+    <h1 id="structure-of-a-lenskit-recommender">Structure of a LensKit Recommender</h1>
+
+<p>LensKit has many different interfaces and components, so it can seem a bit hard to know where to get started with designing or implementing a new algorithm.  Hopefully this page will clear up a lot of the confusion and help you understand how LensKit thinks about recommendation.</p>
+
+<h2 id="scoring-items">Scoring Items</h2>
+
+<p>The heart of most LensKit recommender algorithms is the <code>ItemScorer</code>.  If you are trying to implement a new algorithm for LensKit, and it’s a traditional score-the-items, pick-the-top-<em>N</em> recommender, you probably want to implement an <code>ItemScorer</code>.</p>
+
+<p><a href="http://lenskit.org/apidocs/org/grouplens/lenskit/ItemScorer.html">ItemScorer</a>s provide user-personalized scores for items.  These scores could be anything; they could be predicted ratings, purchase probabilities, TF-IDF cosine similarity between the item and the user’s profile, or whatever method the underlying algorithm uses to score algorithms.  The only restriction on the output of an item scorer is that higher scores should be ‘better’ in whatever sense the scorer measures.</p>
+
+<h2 id="predicting-ratings">Predicting Ratings</h2>
+
+<p>If you want to present rating predictions to users, you want use a <a href="http://lenskit.org/apidocs/org/grouplens/lenskit/RatingPredictor.html">RatingPredictor</a>.  Rating predictors are like scorers (in fact, the API is entirely parallel), but their output is predicted ratings in whatever rating scale you use.  With the <code>ItemScorer</code> and <code>RatingPredictor</code> interfaces, LensKit breaks the rating prediction task into two pieces.  The <code>ItemScorer</code> is responsible for computing some kind of score, and the <code>RatingPredictor</code> maps those scores onto the rating range.</p>
+
+<p>Often, the item scorer’s output will be (roughly) predicted ratings, and the rating predictor won’t have much work to do.  The default rating predictor, <a href="http://lenskit.org/apidocs/org/grouplens/lenskit/basic/SimpleRatingPredictor.html">SimpleRatingPredictor</a>, just takes the output of an item scorer and clamps it to the rating range (as specified by the <a href="http://lenskit.org/apidocs/org/grouplens/lenskit/data/pref/PreferenceDomain.html">PreferenceDomain</a>).  This means that algorithms such as <a href="http://dx.doi.org/10.1145/2043932.2043956">OrdRec</a> can be implemented as rating predictors, converting scores from any item scorer on whatever scale that scorer provides on into discrete rating predictions (and in fact, this is exactly how we plan to implement it when we get to it).</p>
+
+<p>If you are implementing a new rating prediction strategy, you still probably want to implement an item scorer rather than a rating predictor, particularly if your innovation is in how to compute the predictions or scores themselves.  Only implement a rating predictor if your innovation is in mapping scores to user-visible ratings, or if for some other reason building an item scorer doesn’t make sense.</p>
+
+<p>If you have a rating predictor and want to use it as an item scorer, the <a href="http://lenskit.org/apidocs/org/grouplens/lenskit/basic/RatingPredictorItemScorer.html">RatingPredictorItemScorer</a> is a bridge implementation that uses predicted ratings as scores.</p>
+
+<h2 id="top-n-recommendation">Top-N Recommendation</h2>
+
+<p>The <a href="http://lenskit.org/apidocs/org/grouplens/lenskit/ItemRecommender.html">ItemRecommender</a> interface provides Top-N recommendation.  Given a user ID, it produces lists of recommended items.</p>
+
+<p>The default implementation, <a href="http://lenskit.org/apidocs/org/grouplens/lenskit/TopNItemRecommender.html">TopNItemRecommender</a>, just returns the top <em>N</em> items as scored by an <code>ItemScorer</code>.  So if you want to build a new Top-N recommender, but your innovation is in the item scoring, you still want to implement an <code>ItemScorer</code>.  However, if you want to experiment with different ways of generating recommendation lists, such as topic diversification, then you probably want to create an <code>ItemRecommender</code>.</p>
+
+<p>While the item recommender returns a list, and most implementations order the list in some kind of decreasing order of quality/recommendedness, it is appropriate to implement e.g. a set recommender whose results do not have any intrinsic order as an <code>ItemRecommender</code>.  The application you embed it in could take advantage of this, so long as it knows the configured algorithm doesn’t return some order that really needs to be maintained for the recommendations to make sense.</p>
+
+<h2 id="putting-it-all-together">Putting It All Together</h2>
+
+<p>In most algorithms, the components work together like this (an arrow A → B means A uses B):</p>
+
+<p><img src="scorer-arch.svg" alt="Core recommender components" /></p>
+
+<p>Both the rating predictor and the item recommender use the item scorer to generate scores, which they use to produce their respective outputs.  If you want to change the algorithm, you change the item scorer.</p>
+
+<p>You can use different item scorers for prediction and recommendation, using <a href="../configuration/">context-sensitive configuration</a>.</p>
+
+<p>Also, while the default rating predictor and item recommender use an item scorer, you can implement item recommenders and rating predictors that do not use an item scorer if you wish.</p>
+
+
+
+  </article>
+</div>
+
+<footer>
+  Copyright © 2010–2014 <a href="https://github.com/lenskit/lenskit/blob/master/CONTRIBUTORS.md">LensKit Contributors</a>.
+<a href="/thanks/">Acknowledgements and Credits</a>.<br>
+Problems? Suggestions? This site is [public on GitHub](http://github.com/lenskit/lenskit.github.io).
+Hosted on [GitHub Pages](https://pages.github.com/).
+
+</footer>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/foundation/js/foundation.min.js"></script>
+<script src="/bower_components/highlightjs/highlight.pack.js"></script>
+<script src="/s/lenskit.js"></script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>
